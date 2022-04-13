@@ -8,11 +8,11 @@ def connect_device(ip: str, devices_name: str, log_path: str, adb_path, method=N
     """
     链接手机端 调用方法
     auto_setup(__file__, devices=["Android://127.0.0.1:5037/SJE5T17B17","Android://127.0.0.1:5037/SJE5T17B18"])
-    :param ip:
-    :param devices_name:
+    :param ip:本地ip 貌似是固定的
+    :param devices_name:从adb devices获取
     :param adb_path:
-    :param method:
-    :param log_path:
+    :param method:针对手机配置
+    :param log_path:链接log存放path
     :return:
     """
     index_time = 10
