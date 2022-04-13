@@ -45,8 +45,8 @@ def get_dev_name() -> list:
     return devices_list
 
 
-if __name__ == '__main__':
-    dev_name = get_dev_name()
-    a = connect_device(ip="127.0.0.1:5037", devices_names=dev_name,
-                       log_path="C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\logs", adb_path=1)
-    print(a)
+# if __name__ == '__main__':
+#     dev_name = get_dev_name()
+#     a = connect_device(ip="127.0.0.1:5037", devices_names=dev_name,
+#                        log_path="C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\logs", adb_path=1)
+#     print(a)
