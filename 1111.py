@@ -1,2 +1,3 @@
- for i in range():
+for i in range(9):
   print(1)
+import os
