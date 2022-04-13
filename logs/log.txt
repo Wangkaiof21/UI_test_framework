@@ -1,1 +1,0 @@
-{"tag": "function", "depth": 1, "time": 1649839922.4674945, "data": {"name": "home", "call_args": {}, "start_time": 1649839921.6915755, "ret": null, "end_time": 1649839922.4674945}}
