@@ -15,11 +15,31 @@ def test_case():
         start_game(G.DEVICE, "com.stardust.spotlight")
         sleep(10)
         poco = poco_connect("localhost", 5001)
-        poco("Refresh").click()
-        sleep(2)
-        poco("Chapter(Clone)").click()
-        sleep(2)
-        poco("Play").click()
+        button = poco("ViewCanvas").offspring("newest_root").child("Viewport").child("Content").child("NormalBookList(Clone)")[0].child("seeall")
+        search_target_boot(poco, button)
+        # poco("seeall").click()
+        # poco("Play").click()
+    except Exception as e:
+        print(f"error {e}")
+
+
+def search_target_boot(poco, button) -> None:
+    """
+    搜寻合适的书架
+    :param poco:
+    :param button:
+    :return:
+    """
+    try:
+        for i in range(10):
+            if button:
+                button.click()
+                break
+            else:
+                point_a = [0.5, 0.55]
+                center = [0.5, 0.1]
+                poco.swipe(point_a, center)
+                sleep(2)
     except Exception as e:
         print(f"error {e}")
 
