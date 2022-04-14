@@ -1,4 +1,12 @@
 import os
+from datetime import date
 
+user = 'eric_idle'
+member_since = date(1975, 7, 31)
 
-print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+delta = date.today() - member_since
+
+print(f'{user=!s}  {delta.days=:,d}')
+
+x = 3
+print(f"{x+1=}")
