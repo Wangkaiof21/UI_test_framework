@@ -5,7 +5,9 @@ import requests
 import time
 import hmac
 import random
+
 BOOK_ID = "666010190"
+
 
 def get_json_file_path(json_path):
     """
@@ -108,49 +110,74 @@ def get_app_login_token(debug=True, secret="56a354ec", did="zpf0001"):
     return token
 
 
-def for_book_chapter_id_get_action_list(token, debug=True, secret="56a354ec", did="zpf0001",
-                                        story_chapter_id="666010190001"):
+def ini_common_header() -> dict:
     """
-    666010190001 实际上是66601019+0001 书籍的id + ？
-    所以我没要先通过接口获取书籍信息 书籍id 有多少章节 拼接字段
-    从章节id获取行动数据 行动数据是个list 到时候要和action_dict.txt 做一个取值
+    自動化生成新的dict
+    :return:
+    """
+    result = dict()
+    result['timestamp'] = ''
+    result['sign'] = ''
+    result['noise'] = ''
+    result['did'] = ''
+    result['version'] = '3.170.1'
+    result['channel'] = 'AVG10003'
+    result['package-name'] = 'com.stardust.spotlight'
+    result['Accept-Language'] = 'en'
+    result['dlevel'] = '_medium'
+    result['authorization'] = ''
+    return result
 
-    后面需要封装request库，选择url的方法
 
-    :param token:
+def get_test_url(debug=True):
+    """
+
     :param debug:
-    :param secret:
-    :param did:
-    :param story_chapter_id:
     :return:
     """
     if debug:
         # 测试服HOST
         url = "http://project_x_api.stardustworld.cn/api/v1"
+        return url
     else:
         # 审核服HOST
         url = "http://dev_spt_aws_game_api.stardustgod.com/api/v1"
+        return url
 
+
+def for_book_chapter_id_get_action_list(token, debug=True, secret="56a354ec", did="zpf0001",
+                                        story_chapter_id="666010190001", story_id_change=False, change_id="6660"):
+    """
+    666010190001 实际上是6660 1019+0001 书籍的id + ？
+    所以我们要先通过接口获取书籍信息 书籍id 有多少章节 拼接字段
+
+    从章节id获取行动数据 行动数据是个list 到时候要和action_dict.txt 做一个取值
+    后面需要封装request库，
+    增加内部修改id功能
+
+    :param token:
+    :param debug:debug模式 打开则是测试服 不打开审核服
+    :param secret:加密字段
+    :param did:唯一标识
+    :param story_chapter_id:章节id
+    :param story_id_change:打开则是要重新编辑id 现在是暂时在id前面加字段
+    :param change_id:需要添加的字段
+    :return:
+    """
+    if story_id_change:
+        full_id = f"{change_id}{story_chapter_id}"
+    else:
+        full_id = story_chapter_id
+    url = get_test_url(debug)
     uri = "/story/chapter/actions/"
     # 'version': '3.151.1',
-    common_header = {'timestamp': '',
-                     'sign': '',
-                     'noise': '',
-                     'did': '',
-                     'version': '3.170.1',
-                     'channel': 'AVG10003',
-                     'package-name': 'com.stardust.spotlight',
-                     'Accept-Language': 'en',
-                     'dlevel': '_medium',
-                     'authorization': ''
-                     }
-
+    common_header = ini_common_header()
     common_data = {
         "did": f"{did}",
         "timestamp": f"{str(int(time.time()))}"
     }
 
-    payload = {"story_chapter_id": story_chapter_id}
+    payload = {"story_chapter_id": full_id}
     # 将参数加密
     data = concatenate_strings(common_data, payload)
     sign = get_sign(data, secret)
@@ -159,8 +186,6 @@ def for_book_chapter_id_get_action_list(token, debug=True, secret="56a354ec", di
     common_header['noise'] = str(random.randrange(100, 999))
     common_header['did'] = did
     common_header["authorization"] = "Bearer" + " " + token
-    # print("common_header", repr(common_header))
-
     try:
         response = requests.request("GET", url + uri, headers=common_header, params=payload)
     except Exception as e:
@@ -178,32 +203,14 @@ def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec",
     :param did:
     :return:
     """
-    if debug:
-        # 测试服HOST
-        url = "http://project_x_api.stardustworld.cn/api/v1"
-    else:
-        # 审核服HOST
-        url = "http://dev_spt_aws_game_api.stardustgod.com/api/v1"
-
+    url = get_test_url(debug)
     uri = "/story/show/"
     # 'version': '3.151.1',
-    common_header = {'timestamp': '',
-                     'sign': '',
-                     'noise': '',
-                     'did': '',
-                     'version': '3.170.1',
-                     'channel': 'AVG10003',
-                     'package-name': 'com.stardust.spotlight',
-                     'Accept-Language': 'en',
-                     'dlevel': '_medium',
-                     'authorization': ''
-                     }
-
+    common_header = ini_common_header()
     common_data = {
         "did": f"{did}",
         "timestamp": f"{str(int(time.time()))}"
     }
-
     payload = {"story_id": story_id}
     # 将参数加密
     data = concatenate_strings(common_data, payload)
@@ -218,9 +225,7 @@ def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec",
         response = requests.request("GET", url + uri, headers=common_header, params=payload)
     except Exception as e:
         raise e
-    print(response.json())
     chapter_ids = response.json()["data"]["chapter_ids"]
-    print(chapter_ids)
     return chapter_ids
 
 
@@ -230,13 +235,17 @@ def main():
     token = get_app_login_token()
     ids = for_story_id_get_chapter_ids(BOOK_ID, token)
     # ids = for_story_id_get_chapter_ids("10414", token)
+    index = 0
     for ch_id in ids:
-        ch_id = "6660"+str(ch_id)
-        result = for_book_chapter_id_get_action_list(token, story_chapter_id=ch_id)
-        print(repr(result))
-        break
-
-
+        ch_id = str(ch_id)
+        result = for_book_chapter_id_get_action_list(token, story_chapter_id=ch_id, story_id_change=True,
+                                                     change_id="6660")
+        dir = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files"
+        file_name = f"{dir}\\result_json_{index}.txt"
+        result2 = json.dumps(result)
+        with open(file_name, "w+", encoding="utf-8") as w:
+            w.write(result2)
+        index += 1
 
 
 if __name__ == '__main__':
