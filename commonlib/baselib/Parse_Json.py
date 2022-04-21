@@ -238,7 +238,7 @@ def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec",
     return chapter_ids
 
 
-def parse_action_list_to_json(result_data: list, save_path, chunk_size=128):
+def parse_action_list_to_json(result_data: list, save_path, action_dict, chunk_size=128):
     """
     解析返回的资源数据，发起请求获取zip文件 存储在固定文件夹 并解压重命名获取行动数据
     解压之后 读取txt内容 洗数据
@@ -246,6 +246,7 @@ def parse_action_list_to_json(result_data: list, save_path, chunk_size=128):
     :param result_data:
     :param save_path:
     :param chunk_size:块大小 怕文件过大 分块写入
+    :param action_dict:
     :return:
     """
     target_url_a = "http://spt-cdn.stardustgod.com/spt/"
@@ -310,10 +311,12 @@ def parse_action_list_to_json(result_data: list, save_path, chunk_size=128):
                     with open(json_file, "r", encoding="utf-8") as r:
                         read_data = str(r.read())
                         json_object = json.loads(read_data)
+                        # 其他数据可能不重要 直接取 action_list
                         action_list = json_object["action_list"]
                         new_action_list = list()
                         for date, items in groupby(action_list, key=itemgetter('dialog_no')):
                             new_action_list.append(list(items))
+
                         full_action_list = list()
                         for index in range(len(new_action_list)):
                             index_ = list()
@@ -324,6 +327,7 @@ def parse_action_list_to_json(result_data: list, save_path, chunk_size=128):
                                     content_type = dict()
                                     for key, value in content.items():
                                         if key == "type":
+                                            value = matching_dictionary_to_language(str(value), action_dict)
                                             content_type[key] = value
                                     content_types.append(content_type)
                                 index_.append(content_types)
@@ -331,14 +335,51 @@ def parse_action_list_to_json(result_data: list, save_path, chunk_size=128):
                             new_action_list[index][0]["item_list"] = new_
                             full_action_list.append(new_action_list[index])
                         full_action_lists = list()
+
                         for line in full_action_list:
                             full_action_lists.append(line[0])
                         for line in full_action_lists:
                             print(line)
-
+                print("\n")
 
     except Exception as e:
         print(f"Delete file error {e}")
+
+
+def matching_dictionary_to_language(value: str, action_dict: dict):
+    """
+    匹配字典的
+    :param value:
+    :param action_dict:
+    :return:
+    """
+    if value not in action_dict.keys():
+        result = value
+    else:
+        result = action_dict.get(value)
+    return result
+
+
+def read_txt_to_dict(fp):
+    """
+    把txt里面的内容读出来 且转换成字典 用type的key去调用转换成 方法名？
+    :param fp:
+    :return:
+    """
+    action_name_dict = dict()
+    with open(fp, 'rb') as f:
+        try:
+            data = f.read().decode("utf-8")
+            data = data.split("\r")[5:-1]
+            for line in data:
+                new_ = line.replace("\n    ", "").replace("\n", '').replace(",", "").replace("//", "").replace(" ", "")
+                if "=" in new_:
+                    key, value = new_.split("=")
+                    action_name_dict[value] = key
+        except Exception as e:
+            print(f"Change dict error {e}")
+            return {}
+    return action_name_dict
 
 
 def main():
@@ -348,14 +389,12 @@ def main():
     token = get_app_login_token()
     ids = for_story_id_get_chapter_ids(BOOK_ID, token)
     result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
-    parse_action_list_to_json(result_list, save_path=parse_path)
 
-    # dir = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files"
-    # file_name = f"{dir}\\result_json_{index}.txt"
-    # result2 = json.dumps(result)
-    # with open(file_name, "w+", encoding="utf-8") as w:
-    #     w.write(result2)
-    # index += 1
+    txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
+    result_dict = read_txt_to_dict(txt_path)
+    parse_action_list_to_json(result_list, save_path=parse_path, action_dict=result_dict)
+
+
 
 
 if __name__ == '__main__':

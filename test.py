@@ -61,41 +61,63 @@ def list_add(test_list: list):
     return node_
 
 
-def data_change():
-    pass
+def read_json_to_files(files_path, action_dict: dict):
+    """
+
+    :param files_path:
+    :param action_dict:
+    :return:
+    """
+    for fp in files_path:
+        with open(fp, "r", encoding="utf-8") as r:
+            json_file = str(r.read())
+            json_object = json.loads(json_file)
+            # 其他数据可能不重要 直接取 action_list
+            action_list = json_object["action_list"]
+            new_action_list = list()
+            for date, items in groupby(action_list, key=itemgetter('dialog_no')):
+                new_action_list.append(list(items))
+
+            full_action_list = list()
+            for index in range(len(new_action_list)):
+                index_ = list()
+                new_ = ""
+                for line in new_action_list[index]:
+                    content_types = list()
+                    for content in line["item_list"]:
+                        content_type = dict()
+                        for key, value in content.items():
+                            if key == "type":
+                                value = matching_dictionary_to_language(str(value), action_dict)
+                                content_type[key] = value
+                        content_types.append(content_type)
+                    index_.append(content_types)
+                    new_ = list_add(index_)
+                new_action_list[index][0]["item_list"] = new_
+                full_action_list.append(new_action_list[index])
+            full_action_lists = list()
+            for line in full_action_list:
+                full_action_lists.append(line[0])
+            for line in full_action_lists:
+                print(line)
+        print("\n")
+        """写一个写表的模块 读表的模块 
+            封装方法eval()
+        """
 
 
-def read_json_to_files(fp):
-    with open(fp, "r", encoding="utf-8") as r:
-        json_file = str(r.read())
-        json_object = json.loads(json_file)
-        # 其他数据可能不重要 直接取 action_list
-        action_list = json_object["action_list"]
-        new_action_list = list()
-        for date, items in groupby(action_list, key=itemgetter('dialog_no')):
-            new_action_list.append(list(items))
-
-        full_action_list = list()
-        for index in range(len(new_action_list)):
-            index_ = list()
-            new_ = ""
-            for line in new_action_list[index]:
-                content_types = list()
-                for content in line["item_list"]:
-                    content_type = dict()
-                    for key, value in content.items():
-                        if key == "type":
-                            content_type[key] = value
-                    content_types.append(content_type)
-                index_.append(content_types)
-                new_ = list_add(index_)
-            new_action_list[index][0]["item_list"] = new_
-            full_action_list.append(new_action_list[index])
-        full_action_lists = list()
-        for line in full_action_list:
-            full_action_lists.append(line[0])
-        for i in full_action_lists:
-            print(i)
+def matching_dictionary_to_language(value: str, action_dict: dict):
+    """
+    匹配字典的
+    :param value:
+    :param action_dict:
+    :return:
+    """
+    if value not in action_dict.keys():
+        result = value
+    else:
+        result = action_dict.get(value).lower()
+    return result
 
 
 def read_txt_to_dict(fp):
@@ -104,15 +126,27 @@ def read_txt_to_dict(fp):
     :param fp:
     :return:
     """
+    action_name_dict = dict()
     with open(fp, 'rb') as f:
-        contents = f.read()
-        print(contents)
+        try:
+            data = f.read().decode("utf-8")
+            data = data.split("\r")[5:-1]
+            for line in data:
+                new_ = line.replace("\n    ", "").replace("\n", '').replace(",", "").replace("//", "").replace(" ", "")
+                if "=" in new_:
+                    key, value = new_.split("=")
+                    action_name_dict[value] = key
+        except Exception as e:
+            print(f"Change dict error {e}")
+            return {}
+    return action_name_dict
 
 
 if __name__ == '__main__':
-    # path = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files\\dialog_10190001.txt"
-    # read_json_to_files(path)
+    path1 = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files\\dialog_10190001.txt"
+    path2 = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files\\dialog_10190002.txt"
+    path = [path1, path2]
     # txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_dict.txt"))
-    txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_dict.txt"))
-    read_txt_to_dict(txt_path)
-    print(txt_path)
+    txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_book.txt"))
+    result_dict = read_txt_to_dict(txt_path)
+    read_json_to_files(path, action_dict=result_dict)

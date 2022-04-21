@@ -1,0 +1,307 @@
+/// <summary>
+/// 故事的动作类型 --APP
+/// </summary>
+public enum AppStoryActionType
+{
+    // 运行的类型
+    PLAY_DIALOG = 10001,
+    /// <summary>
+    /// 设置对白消息
+    /// </summary>
+    SET_DIALOG = 10002,
+    //打电话
+    PHONE = 10002,
+    ADD_SCENE = 11001,
+    REMOVE_SCENE = 11002,
+    //开始电话界面
+    PHONE_BEGIN = 11003,
+    //移除电话界面
+    PHONE_END = 11004,
+    //设置打电话相关
+    PHONE_TEXT_SET = 11005,
+    ADD_PORP = 12001,
+    REMOVE_PORP = 12002,
+    //车载道具移动
+    MOVEPROPVEHICLE = 12003,
+    //挂载道具
+    MOVEPROPWIDGET = 12004,
+    //道具设置位置
+    MOVEPROPPOSITION = 12005,
+
+    /// <summary>
+    /// 物品移动
+    /// </summary>
+    OBJECT_SCENE_MOVE = 12006,
+    /// <summary>
+    /// 挂件移动
+    /// </summary>
+    OBJECT_ROLE_MOVE = 12007,
+
+    //添加道具
+    ADD_ROLE = 13001,
+    //移除角色
+    REMOVE_ROLE = 13002,
+    //角色动画
+    ANIMATION_ROLE = 13003,
+    //人物移动
+    MOVE_ROLE = 13004,
+    //人物拍照
+    ROLE_PHOTO = 13005,
+    //设置人物位置
+    ROLE_SET_POSITION = 13006,
+    //人物转向
+    ROLE_TURN_ = 13007,
+    //角色隐身
+    ROLE_HIDING = 13008,
+    //选项
+    OPTION_LIST = 14001,
+    //套装选项
+    COSTUME_LIST = 14002,
+    //更换套装
+    COSTUME_SUIT = 14003,
+    //选择肤色
+    SELECT_SKIN_ = 14004,
+    //选择肤色
+    SELECT_SKIN = 14005,
+    //更新 血亲肤色
+    REFRESH_RELATION = 14007,
+    /// <summary>
+    /// 选项确认条目
+    /// </summary>
+    OPTION_CONFIRM = 14008,
+
+    //播放音乐
+    PLAY_SOUND = 15001,
+    //停止音乐
+    STOP_SOUND = 15002,
+    //展示标题
+    SHOW_TITLE = 16001,
+    //镜头移动
+    LENS_MOVE = 17001,
+    //镜头特效
+    LENS_EFFECT = 18001,
+    //更换装扮
+    COSPLAY_COS = 19001,
+    //更换套装
+    COSPLAY_COSSUIT = 19002,
+    /// <summary>
+    /// 显示遮罩
+    /// </summary>
+    MASK = 20009,
+    /// <summary>
+    /// 改变好感度
+    /// </summary>
+    CHANGE_FAVORABILITY = 30001,
+
+    /// <summary>
+    /// 人物静态条目
+    /// </summary>
+    ROLE_STATIC_ACTION = 40010,
+    /// <summary>
+    /// 人物动态条目
+    /// </summary>
+    ROLE_DYNAMIC_ACTION = 40011,
+    /// <summary>
+    /// 角色跟随
+    /// </summary>
+    ROLE_ADD_STATIC = 40012,
+    /// <summary>
+    /// 角色动态跟随
+    /// </summary>
+    ROLE_ADD_DYNAMIC = 40013,
+
+    /// <summary>
+    /// 角色添加部位
+    /// </summary>
+    ROLE_ADD_SKIN = 40014,
+
+    /// <summary>
+    /// 角色copy 部位
+    /// </summary>
+    ROLE_COPY_SKIN = 40015,
+
+    /// <summary>
+    /// 角色copy color
+    /// </summary>
+    ROLE_COPY_COLOR = 40016,
+
+    /// <summary>
+    /// 人物移除部位
+    /// </summary>
+    ROLE_REMOVE_PART = 40020,
+    /// <summary>
+    /// 人物重置
+    /// </summary>
+    ROLE_RESET_PAET = 40021,
+
+
+    /// <summary>
+    /// 物件 静态条目
+    /// </summary>
+    PROP_STATIC_ACTION = 40030,
+    /// <summary>
+    /// 物件动态条目
+    /// </summary>
+    PROP_DYNAMIC_ACTION = 40031,
+
+    /// <summary>
+    /// 物件挂载静态
+    /// </summary>
+    PROP_ADD_STATIC = 40032,
+    /// <summary>
+    /// 物件挂载动态
+    /// </summary>
+    PROP_ADD_DYNAMIC = 40033,
+
+    /// <summary>
+    /// 物件旋转变化
+    /// </summary>
+    PROP_ROTATION = 40034,
+    /// <summary>
+    /// 物件缩放变化
+    /// </summary>
+    PROP_SCALE = 40035,
+    /// <summary>
+    /// 物件透明度变化
+    /// </summary>
+    PROP_ALPHA = 40036,
+
+    SET_SCENE = 40040,
+
+
+
+    /// <summary>
+    /// 展示tips
+    /// </summary>
+    SHOW_TIPS = 30010,
+
+    /// <summary>
+    /// 分镜开始
+    /// </summary>
+    SPLIT_BEGIN = 31,
+
+    /// <summary>
+    /// 分镜结束
+    /// </summary>
+    SPLIT_END = 32,
+
+    /// <summary>
+    /// goto
+    /// </summary>
+    GO_TO = 61,
+    /// <summary>
+    /// 设置快照
+    /// </summary>
+    SET_SNAP_SHOOT = 62,
+    /// <summary>
+    /// 等待
+    /// </summary>
+    WAIT = 63,
+    /// <summary>
+    /// 前置条件
+    /// </summary>
+    PREDITION = 64,
+
+    /// <summary>
+    /// 标记 bool 值
+    /// </summary>
+    FLAG = 50001,
+    /// <summary>
+    /// 变量值
+    /// </summary>
+    VARIATE = 50002,
+
+    /// <summary>
+    ///  字符串变量值
+    /// </summary>
+    VARIATE_STING = 50003,
+
+    /// <summary>
+    /// 自定义输入对白内容
+    /// </summary>
+    INPUT_DIALOG = 50010,
+
+    /// <summary>
+    /// 自定义捏脸部位
+    /// </summary>
+    CustomPinchFace=50020,
+
+    /// <summary>
+    /// 图片action
+    /// </summary>
+    Picture_Action = 60001,
+
+    /// <summary>
+    /// 回撤
+    /// </summary>
+    ReCall=60002,
+
+    /// <summary>
+    /// 收集cg卡
+    /// </summary>
+    Collect_CG=70001,
+
+    /// <summary>
+    /// 用做ui的图片
+    /// </summary>
+    UI_Image = 40100,
+
+    /// <summary>
+    /// 移除用做ui的图片
+    /// </summary>
+    Remove_UI_Image = 40109,
+
+    /// <summary>
+    /// UI文本。
+    /// </summary>
+    UI_Text = 40110,
+
+    /// <summary>
+    /// 移除UI文本。
+    /// </summary>
+    Remove_UI_Text = 40119,
+
+    /// <summary>
+    /// 编辑器直接设置前面章节的选项数据
+    /// </summary>
+    Choice_Option = 80001,
+
+    /// <summary>
+    /// 修改显示名
+    /// </summary>
+    ModifyDisplayName = 80101,
+
+    /// <summary>
+    /// 获取随机数
+    /// </summary>
+    RandomNumber = 80201,
+
+    /// <summary>
+    /// 倒计时点击
+    /// </summary>
+    CounterClick = 80301,
+
+    ///自定义UI动态行为
+    StoryUIDynamic = 40101,
+    ///自定义UI旋转动态行为
+    StoryUIRotateDynamic = 40102,
+    ///自定义UI缩放动态行为
+    StoryUIScaleDynamic = 40103,
+    ///自定义UI透明渐变动态行为
+    StoryUIAlphaDynamic = 40104,
+
+
+    ///自定义UI文本动态行为
+    StoryUITextDynamic = 40111,
+    ///自定义UI文本旋转动态行为
+    StoryUITextRotateDynamic = 40112,
+    ///自定义UI文本缩放动态行为
+    StoryUITextScaleDynamic = 40113,
+    ///自定义UI文本透明动态行为
+    StoryUITextAlphaDynamic = 40114,
+
+    ///倒计时跳转开始
+    CountdownGotoBegin = 65,
+        ///倒计时跳转结束
+    CountdownGotoEnd = 66,
+}
