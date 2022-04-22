@@ -1,0 +1,275 @@
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Column name 'id' not found ,add it at (1,7....)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Column name 'dialog_id' not found ,add it at (1,8....)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Column name 'instance_id' not found ,add it at (1,9....)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Column name 'dialog_no' not found ,add it at (1,10....)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Column name 'action_id' not found ,add it at (1,11....)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Column name 'item_list' not found ,add it at (1,12....)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', None)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(3, None, setNone)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 3, 6)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(4, id, set10001)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 4, 7)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(5, dialog_id, set10001)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 5, 8)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(6, instance_id, set20001)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 6, 9)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(7, dialog_no, set1)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 7, 10)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(8, action_id, set0)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 8, 11)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(9, item_list, setadd_scene,play_sound,play_sound,cosplay_cossuit,play_dialog,object_scene_move,)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 9, 12)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', None)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(10, None, setNone)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 10, 6)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(11, id, set10002)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 11, 7)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(12, dialog_id, set10002)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 12, 8)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(13, instance_id, set20001)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 13, 9)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(14, dialog_no, set2)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 14, 10)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(15, action_id, set0)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 15, 11)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(16, item_list, setadd_scene,play_sound,play_sound,cosplay_cossuit,play_dialog,object_scene_move,)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 16, 12)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', None)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(17, None, setNone)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 17, 6)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(18, id, set10003)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 18, 7)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(19, dialog_id, set10003)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 19, 8)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(20, instance_id, set20001)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 20, 9)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(21, dialog_no, set3)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 21, 10)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(22, action_id, set0)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 22, 11)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(23, item_list, setadd_scene,play_sound,play_sound,)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 23, 12)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', None)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(24, None, setNone)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 24, 6)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(25, id, set10004)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 25, 7)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(26, dialog_id, set10004)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 26, 8)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'instance_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(27, instance_id, set20001)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 27, 9)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'dialog_no')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(28, dialog_no, set4)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 28, 10)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'action_id')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(29, action_id, set0)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 29, 11)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 'item_list')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	In 'dialog_10190001',Cell(30, item_list, setadd_scene,play_sound,play_sound,cosplay_cossuit,play_dialog,object_scene_move,)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001', 30, 12)[0m
+[37m2022-04-22 15:38:01	INFO	[Excel]	func (<commonlib.baselib.excel.Excel object at 0x00000220FB576340>, 'dialog_10190001')[0m
+[34m2022-04-22 15:38:01	DEBUG	[Excel]	Save 'C:\Users\王凯\Desktop\test_file\UI_test_framework\acc.xlsx'....[0m
