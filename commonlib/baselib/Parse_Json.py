@@ -9,6 +9,14 @@ import zipfile
 import json
 from operator import itemgetter
 from itertools import groupby
+from commonlib.baselib.excel import Excel
+from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
+from commonlib.baselib.msg_center import MsgCenter
+import os
+
+MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
+# msg = MsgCenter(MODULE_NAME)
+msg = MsgCenter(MODULE_NAME)
 
 BOOK_ID = "666010190"
 SLEEP_TIME = 1
@@ -202,6 +210,21 @@ def get_book_chapter_id_result(token, story_chapter_ids: list, debug=True, secre
     return zip_path_list
 
 
+def list_add(test_list: list):
+    node_ = []
+    for ele in test_list:
+        node_ += ele
+    return node_
+
+
+def list_to_str(d_list):
+    ret_str = ""
+    for line in d_list:
+        for k, v in line.items():
+            ret_str += v + ","
+    return ret_str
+
+
 def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec", did="zpf0001"):
     """
     获取故事id的list
@@ -244,7 +267,7 @@ def parse_action_list_to_json(result_data: list, save_path, action_dict, chunk_s
     解压之后 读取txt内容 洗数据
     到时候要和action_dict.txt 做一个取值
     :param result_data:
-    :param save_path:
+    :param save_path:章节txt保存路径
     :param chunk_size:块大小 怕文件过大 分块写入
     :param action_dict:
     :return:
@@ -304,16 +327,19 @@ def parse_action_list_to_json(result_data: list, save_path, action_dict, chunk_s
         print(f"Delete file error {e}")
 
     try:
+        book_ = list()
         for file_path, dir_list, files in os.walk(save_path):
             for file_name in files:
                 if file_name.endswith(".txt"):
-                    json_file = os.path.join(file_path, file_name)
-                    with open(json_file, "r", encoding="utf-8") as r:
-                        read_data = str(r.read())
-                        json_object = json.loads(read_data)
+                    file_ = os.path.join(file_path, file_name)
+                    chapter_data = dict()
+                    with open(file_, "r", encoding="utf-8") as r:
+                        json_file = str(r.read())
+                        json_object = json.loads(json_file)
                         # 其他数据可能不重要 直接取 action_list
                         action_list = json_object["action_list"]
                         new_action_list = list()
+                        # 把条目分组
                         for date, items in groupby(action_list, key=itemgetter('dialog_no')):
                             new_action_list.append(list(items))
 
@@ -326,29 +352,47 @@ def parse_action_list_to_json(result_data: list, save_path, action_dict, chunk_s
                                 for content in line["item_list"]:
                                     content_type = dict()
                                     for key, value in content.items():
+                                        # 获取与配置'content': {}是对应动作可以选择的值 ,'type': 15002 是动作的值
                                         if key == "type":
+                                            # 'type': 15002 动作的值直接转化成action_dict 里的字符串 也是就行动的名称 COSTUME_LIST:14002
                                             value = matching_dictionary_to_language(str(value), action_dict)
                                             content_type[key] = value
                                     content_types.append(content_type)
                                 index_.append(content_types)
                                 new_ = list_add(index_)
+                                new_ = list_to_str(new_)
                             new_action_list[index][0]["item_list"] = new_
+                            # 新增是否测试 测试点开关ture or false 方便处理树状分支剧情
+                            new_action_list[index][0]["test_or_not"] = ""
+                            # 暂时屏蔽前置条件 这个做法有问题 后期看看怎么改
+                            new_action_list[index][0]["show_pre"] = ""
                             full_action_list.append(new_action_list[index])
+                        # 去除多一层列表
                         full_action_lists = list()
-
                         for line in full_action_list:
                             full_action_lists.append(line[0])
-                        for line in full_action_lists:
-                            print(line)
-                print("\n")
-
+                        # 获得一个章节的内容 {章节名 : 章节内容}
+                        chapter_name = os.path.basename(file_).split('.')[0]
+                        chapter_data[chapter_name] = full_action_lists
+                        LogMessage(module="read_json_to_files", level=LOG_INFO,
+                                   msg=f"Add the book chapter => {chapter_name}")
+                    book_.append(chapter_data)
+                    """写一个写表的模块 读表的模块
+                        封装方法eval()
+                         set{'select_list': [{'select_id': 1019000212701,
+                    """
+        for index in range(len(book_)):
+            for ch, value in book_[index].items():
+                LogMessage(level=LOG_INFO, msg=f"The book has chapter {ch}", module=MODULE_NAME)
+        return book_
     except Exception as e:
-        print(f"Delete file error {e}")
+        LogMessage(level=LOG_ERROR, msg=f"chapter file error {e}", module=MODULE_NAME)
+        return []
 
 
 def matching_dictionary_to_language(value: str, action_dict: dict):
     """
-    匹配字典的
+    匹配action字典的名字 方便转换成方法名
     :param value:
     :param action_dict:
     :return:
@@ -382,19 +426,39 @@ def read_txt_to_dict(fp):
     return action_name_dict
 
 
-def main():
-    path = os.path.abspath(os.path.join(os.getcwd(), "../../json_package"))
-    parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
-    # read_json_to_dict(path)
-    token = get_app_login_token()
-    ids = for_story_id_get_chapter_ids(BOOK_ID, token)
-    result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
+def write_action_boot_data(action_data, excel_fp: str, start_row=2) -> None:
+    """
+    写入数据
+    :param action_data:
+    :param excel_fp:
+    :param start_row:
+    :return:
+    """
+    excel = Excel(excel_fp)
 
+    for index in range(len(action_data)):
+        # ch_name = str(action_data[index].keys())
+        for ch, value in action_data[index].items():
+            excel.records_write(ch, records=value, start_row=start_row)
+            excel.save(backup=False)
+
+
+def main():
+    parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
+    excel_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_.xlsx"))
+    # 获取token
+    token = get_app_login_token()
+    # 获取书籍章节列表
+    ids = for_story_id_get_chapter_ids(BOOK_ID, token)
+    # 拼接书籍章节列表
+    result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
+    # 获取 action type 对应的字典
     txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
     result_dict = read_txt_to_dict(txt_path)
-    parse_action_list_to_json(result_list, save_path=parse_path, action_dict=result_dict)
-
-
+    # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
+    results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=result_dict)
+    # 把action data 写入进 xlsx 中等待解析
+    write_action_boot_data(action_data=results, excel_fp=excel_path)
 
 
 if __name__ == '__main__':

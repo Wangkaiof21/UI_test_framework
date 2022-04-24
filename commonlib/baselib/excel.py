@@ -85,6 +85,7 @@ class Excel:
                 LogMessage(level=LOG_INFO, module="Excel", msg='sheet_name:"{}"不存在 新建~'.format(self.file_name))
             else:
                 LogMessage(level=LOG_ERROR, module="Excel", msg='sheet_name:"{}"不存在'.format(self.file_name))
+        # file_name 里面所有sheet的名字 (List[str])
         self.sheet_list = self.wb.sheetnames
         self.align = Alignment(horizontal="left", vertical="center")
 

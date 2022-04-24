@@ -42,48 +42,62 @@ def read_json_to_files(files_path, action_dict: dict):
     :return:
     """
     book_ = list()
-    for fp in files_path:
-        chapter_data = dict()
-        with open(fp, "r", encoding="utf-8") as r:
-            json_file = str(r.read())
-            json_object = json.loads(json_file)
-            # 其他数据可能不重要 直接取 action_list
-            action_list = json_object["action_list"]
-            new_action_list = list()
-            for date, items in groupby(action_list, key=itemgetter('dialog_no')):
-                new_action_list.append(list(items))
-            full_action_list = list()
-            for index in range(len(new_action_list)):
-                index_ = list()
-                new_ = ""
-                for line in new_action_list[index]:
-                    content_types = list()
-                    for content in line["item_list"]:
-                        content_type = dict()
-                        for key, value in content.items():
-                            if key == "type":
-                                value = matching_dictionary_to_language(str(value), action_dict)
-                                content_type[key] = value
-                        content_types.append(content_type)
-                    index_.append(content_types)
-                    new_ = list_add(index_)
-                    new_ = list_to_str(new_)
-                new_action_list[index][0]["item_list"] = new_
-                # 新增开关
-                new_action_list[index][0]["test_or_not"] = ""
-                # 暂时屏蔽前置条件
-                new_action_list[index][0]["show_pre"] = ""
-                full_action_list.append(new_action_list[index])
-            full_action_lists = list()
-            for line in full_action_list:
-                full_action_lists.append(line[0])
-            chapter_name = os.path.basename(fp).split('.')[0]
-            chapter_data[chapter_name] = full_action_lists
-        book_.append(chapter_data)
-        """写一个写表的模块 读表的模块 
-            封装方法eval()
-             set{'select_list': [{'select_id': 1019000212701,
-        """
+    for file_path, dir_list, files in os.walk(files_path):
+        for file_name in files:
+            if file_name.endswith(".txt"):
+                file_ = os.path.join(file_path, file_name)
+                chapter_data = dict()
+                with open(file_, "r", encoding="utf-8") as r:
+                    json_file = str(r.read())
+                    json_object = json.loads(json_file)
+                    # 其他数据可能不重要 直接取 action_list
+                    action_list = json_object["action_list"]
+                    new_action_list = list()
+                    # 把条目分组
+                    for date, items in groupby(action_list, key=itemgetter('dialog_no')):
+                        new_action_list.append(list(items))
+
+                    full_action_list = list()
+                    for index in range(len(new_action_list)):
+                        index_ = list()
+                        new_ = ""
+                        for line in new_action_list[index]:
+                            content_types = list()
+                            for content in line["item_list"]:
+                                content_type = dict()
+                                for key, value in content.items():
+                                    # 获取与配置'content': {}是对应动作可以选择的值 ,'type': 15002 是动作的值
+                                    if key == "type":
+                                        # 'type': 15002 动作的值直接转化成action_dict 里的字符串 也是就行动的名称 COSTUME_LIST:14002
+                                        value = matching_dictionary_to_language(str(value), action_dict)
+                                        content_type[key] = value
+                                content_types.append(content_type)
+                            index_.append(content_types)
+                            new_ = list_add(index_)
+                            new_ = list_to_str(new_)
+                        new_action_list[index][0]["item_list"] = new_
+                        # 新增是否测试 测试点开关ture or false 方便处理树状分支剧情
+                        new_action_list[index][0]["test_or_not"] = ""
+                        # 暂时屏蔽前置条件 这个做法有问题 后期看看怎么改
+                        new_action_list[index][0]["show_pre"] = ""
+                        full_action_list.append(new_action_list[index])
+                    # 去除多一层列表
+                    full_action_lists = list()
+                    for line in full_action_list:
+                        full_action_lists.append(line[0])
+                    # 获得一个章节的内容 {章节名 : 章节内容}
+                    chapter_name = os.path.basename(file_).split('.')[0]
+                    chapter_data[chapter_name] = full_action_lists
+                    LogMessage(module="read_json_to_files", level=LOG_INFO,
+                               msg=f"Add the book chapter => {chapter_name}")
+                book_.append(chapter_data)
+                """写一个写表的模块 读表的模块
+                    封装方法eval()
+                     set{'select_list': [{'select_id': 1019000212701,
+                """
+    for index in range(len(book_)):
+        for ch, value in book_[index].items():
+            LogMessage(level=LOG_INFO, msg=f"The book has chapter {ch}", module=MODULE_NAME)
     return book_
 
 
@@ -123,29 +137,28 @@ def read_txt_to_dict(fp):
     return action_name_dict
 
 
-def write_action_boot_data(action_data, excel_fp: str):
+def write_action_boot_data(book_action_data, excel_fp: str) -> None:
     """
     写入数据
-    :param action_data:
+    :param book_action_data:
     :param excel_fp:
     :return:
     """
     excel = Excel(excel_fp)
-
-    for index in range(len(action_data)):
-        ch_name = str(action_data[index].keys())
+    for index in range(len(book_action_data)):
+        # ch_name = str(book_action_data[index].keys())
         # print(action_data[index]["dialog_10190001"])
-        for ch, value in action_data[index].items():
+        for ch, value in book_action_data[index].items():
             excel.records_write(ch, records=value, start_row=None)
 
 
 if __name__ == '__main__':
-    path1 = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files\\dialog_10190001.txt"
-    path2 = "C:\\Users\\王凯\\Desktop\\test_file\\UI_test_framework\\parse_data_files\\dialog_10190002.txt"
-    path = [path1, path2]
+    path = os.path.abspath(os.path.join(os.getcwd(), "parse_data_files"))
+    # path =  os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
+
     # txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_dict.txt"))
     txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_book.txt"))
     excel_path = os.path.abspath(os.path.join(os.getcwd(), "action_.xlsx"))
     result_dict = read_txt_to_dict(txt_path)
     results = read_json_to_files(path, action_dict=result_dict)
-    write_action_boot_data(action_data=results, excel_fp=excel_path)
+    write_action_boot_data(book_action_data=results, excel_fp=excel_path)
