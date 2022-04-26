@@ -1,0 +1,9 @@
+[37m2022-04-26 16:46:19	INFO	[ConnectAdb]	Connect to android://127.0.0.1:5037/0fc2b2400502[0m
+[37m2022-04-26 16:46:23	INFO	[phone_wake]	wake phone[0m
+[37m2022-04-26 16:46:24	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-26 16:46:25	INFO	[start_game]	start game com.stardust.spotlight[0m
+[37m2022-04-26 16:46:40	INFO	[PocoDrivers]	Try find Search....[0m
+[37m2022-04-26 16:46:41	INFO	[PocoDrivers]	Find Search ![0m
+[37m2022-04-26 16:46:47	INFO	[PocoDrivers]	Click Search success![0m
+[37m2022-04-26 16:46:48	INFO	[PocoDrivers]	Try find ViewCanvasUpper....[0m
+[37m2022-04-26 16:46:50	INFO	[PocoDrivers]	Find ViewCanvasUpper ![0m

@@ -35,7 +35,8 @@ from openpyxl.utils import get_column_letter
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 
-MsgCenter("Excel")
+
+# MsgCenter("Excel")
 
 def sheet_exist(func):
     """
@@ -82,6 +83,7 @@ class Excel:
         else:
             if new_flag:
                 self.wb = openpyxl.Workbook()
+                self.wb.save(file_name)
                 LogMessage(level=LOG_INFO, module="Excel", msg='sheet_name:"{}"不存在 新建~'.format(self.file_name))
             else:
                 LogMessage(level=LOG_ERROR, module="Excel", msg='sheet_name:"{}"不存在'.format(self.file_name))
@@ -89,7 +91,7 @@ class Excel:
         self.sheet_list = self.wb.sheetnames
         self.align = Alignment(horizontal="left", vertical="center")
 
-    def save(self, backup=True):
+    def save(self, backup=False):
         """
         新建或者保存excel文件
         :param backup:
@@ -99,7 +101,7 @@ class Excel:
             cur_time = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
             file_name = ".".join(self.file_name.split(".")[:-1])
             suffix = self.file_name.split(".")[-1]
-            print(f"{file_name}_{cur_time}.{suffix}")
+            # print(f"{file_name}_{cur_time}.{suffix}")
             shutil.copy(self.file_name, f"{file_name}_{cur_time}.{suffix}")
         LogMessage(level=LOG_DEBUG, module="Excel", msg=f"Save '{self.file_name}'....")
         try:
@@ -211,8 +213,9 @@ class Excel:
                     col_index = self.column_index_get_by_name(sheet_name, col_name)
                     """获取列号"""
                     value = record.get(col_name)
-                    LogMessage(level=LOG_INFO, module="Excel", msg=f"In '{sheet_name}',Cell({row}, {col_name}, set{value})")
-                    print(sheet_name, row, col_index)
+                    LogMessage(level=LOG_INFO, module="Excel",
+                               msg=f"In '{sheet_name}',Cell({row}, {col_name}, set{value})")
+                    # print(sheet_name, row, col_index)
                     self.cell_handler(sheet_name, row, col_index).value = value
                 row += 1
             self.save()
@@ -279,3 +282,37 @@ class Excel:
         except IndexError:
             LogMessage(level=LOG_ERROR, module="Excel", msg="Empty Sheet.....")
             return dict()
+
+    @sheet_exist
+    def records_get(self, sheet_name, row_start=None, row_end=None, column_start=None, column_end=None,
+                    by="row") -> list:
+        """
+        起始行/列固定为第一行 获取指定范围所有记录 返回dict-list的数据结构
+        :param sheet_name:
+        :param row_start:
+        :param row_end:
+        :param column_start:
+        :param column_end:
+        :param by:
+        :return:
+        """
+        row_start = 1 if by == "row" else row_start
+        column_start = 1 if by == "column" else column_start
+
+        _iter = self.query(sheet_name, row_start=row_start, row_end=row_end, column_start=column_start,
+                           column_end=column_end, by=by)
+
+        records = [record for record in _iter]
+        "将第一个record为dict 的key"
+        keys = records.pop(0)
+        return [dict(zip(keys, values)) for values in records]
+
+    @sheet_exist
+    def get_sheet_names(self, name=None):
+        """
+
+        :param name:
+        :return:
+        """
+        LogMessage(level=LOG_INFO, module="Excel", msg=f"get sheet data {name}...")
+        return self.wb.sheetnames
