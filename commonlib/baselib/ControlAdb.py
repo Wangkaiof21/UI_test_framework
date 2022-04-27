@@ -1,31 +1,45 @@
+from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_INFO
+
+
 def phone_wake(dev):
     """
 
-    :param dev:
+    :param dev: G.DEVICE
     :return:
     """
-    print('dev', dev)
+    LogMessage(module="phone_wake", level=LOG_INFO, msg=f"wake phone")
     dev.wake()
 
 
 def start_game(dev, package):  # 启动游戏
     """
 
-    :param dev:
+    :param dev: G.DEVICE
     :param package:
     :return:
     """
     dev.start_app(package)
-    print("启动游戏", package)
+    LogMessage(module="start_game", level=LOG_INFO, msg=f"start game {package}")
 
 
 def stop_game(dev, package):
     """
 
-    :param dev:
+    :param dev: G.DEVICE
     :param package:
     :return:
     """
     dev.stop_app(package)
-    print(f"停止游戏{package}")
+    LogMessage(module="stop_game", level=LOG_INFO, msg=f"stop game {package}")
     return True
+
+
+def clear_game_data(dev, package):
+    """
+
+    :param dev: G.DEVICE
+    :param package:
+    :return:
+    """
+    dev.clear_app(package)
+    LogMessage(module="stop_game", level=LOG_INFO, msg=f"clean game {package}")

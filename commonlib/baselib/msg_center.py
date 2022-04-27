@@ -37,7 +37,7 @@ class MsgCenter(object):
         # 第二部 创建两个hander 用于写入日志文件和打印到控制台
         date_time = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
 
-        # 默认当前目录为根目录
+        # 默认当前目录为根目录 保存测试文件的Log位置
         log_path = os.getcwd()
         log_path = os.path.join(log_path, "Test_log")
         if not os.path.exists(log_path):
