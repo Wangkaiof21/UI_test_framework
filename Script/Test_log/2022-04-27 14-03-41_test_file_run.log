@@ -1,0 +1,43 @@
+[37m2022-04-27 14:03:42	INFO	[ConnectAdb]	Connect to android://127.0.0.1:5037/0fc2b2400502[0m
+[37m2022-04-27 14:03:46	INFO	[phone_wake]	wake phone[0m
+[37m2022-04-27 14:03:47	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:03:47	INFO	[start_game]	start game com.stardust.spotlight[0m
+[37m2022-04-27 14:04:03	INFO	[test_file_run]	init the game has Diamond:168 Power:50[0m
+[37m2022-04-27 14:04:03	INFO	[PocoDrivers]	Try find Search....[0m
+[37m2022-04-27 14:04:05	INFO	[PocoDrivers]	Find Search ![0m
+[37m2022-04-27 14:04:10	INFO	[PocoDrivers]	Click Search success![0m
+[37m2022-04-27 14:04:11	INFO	[PocoDrivers]	Try find ViewCanvasUpper....[0m
+[37m2022-04-27 14:04:14	INFO	[PocoDrivers]	Find ViewCanvasUpper ![0m
+[37m2022-04-27 14:04:17	INFO	[PocoDrivers]	Click ViewCanvasUpper success![0m
+[37m2022-04-27 14:04:18	INFO	[PocoDrivers]	Try find SearchBook(Clone)....[0m
+[37m2022-04-27 14:04:21	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:04:21	INFO	[ConnectAdb]	Connect to android://127.0.0.1:5037/0fc2b2400502[0m
+[37m2022-04-27 14:04:25	INFO	[phone_wake]	wake phone[0m
+[37m2022-04-27 14:04:25	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:04:26	INFO	[start_game]	start game com.stardust.spotlight[0m
+[37m2022-04-27 14:04:41	INFO	[test_file_run]	init the game has Diamond:168 Power:50[0m
+[37m2022-04-27 14:04:41	INFO	[PocoDrivers]	Try find Search....[0m
+[37m2022-04-27 14:04:43	INFO	[PocoDrivers]	Find Search ![0m
+[37m2022-04-27 14:04:48	INFO	[PocoDrivers]	Click Search success![0m
+[37m2022-04-27 14:04:49	INFO	[PocoDrivers]	Try find ViewCanvasUpper....[0m
+[37m2022-04-27 14:04:52	INFO	[PocoDrivers]	Find ViewCanvasUpper ![0m
+[37m2022-04-27 14:04:55	INFO	[PocoDrivers]	Click ViewCanvasUpper success![0m
+[37m2022-04-27 14:04:56	INFO	[PocoDrivers]	Try find SearchBook(Clone)....[0m
+[37m2022-04-27 14:04:59	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:04:59	INFO	[ConnectAdb]	Connect to android://127.0.0.1:5037/0fc2b2400502[0m
+[37m2022-04-27 14:05:03	INFO	[phone_wake]	wake phone[0m
+[37m2022-04-27 14:05:03	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:05:04	INFO	[start_game]	start game com.stardust.spotlight[0m
+[37m2022-04-27 14:05:19	INFO	[test_file_run]	init the game has Diamond:168 Power:50[0m
+[37m2022-04-27 14:05:19	INFO	[PocoDrivers]	Try find Search....[0m
+[37m2022-04-27 14:05:21	INFO	[PocoDrivers]	Find Search ![0m
+[37m2022-04-27 14:05:26	INFO	[PocoDrivers]	Click Search success![0m
+[37m2022-04-27 14:05:27	INFO	[PocoDrivers]	Try find ViewCanvasUpper....[0m
+[37m2022-04-27 14:05:30	INFO	[PocoDrivers]	Find ViewCanvasUpper ![0m
+[37m2022-04-27 14:05:33	INFO	[PocoDrivers]	Click ViewCanvasUpper success![0m
+[37m2022-04-27 14:05:34	INFO	[PocoDrivers]	Try find SearchBook(Clone)....[0m
+[37m2022-04-27 14:05:37	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:05:37	INFO	[ConnectAdb]	Connect to android://127.0.0.1:5037/0fc2b2400502[0m
+[37m2022-04-27 14:05:41	INFO	[phone_wake]	wake phone[0m
+[37m2022-04-27 14:05:42	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-04-27 14:05:42	INFO	[start_game]	start game com.stardust.spotlight[0m

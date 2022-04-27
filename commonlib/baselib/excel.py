@@ -306,13 +306,3 @@ class Excel:
         "将第一个record为dict 的key"
         keys = records.pop(0)
         return [dict(zip(keys, values)) for values in records]
-
-    @sheet_exist
-    def get_sheet_names(self, name=None):
-        """
-
-        :param name:
-        :return:
-        """
-        LogMessage(level=LOG_INFO, module="Excel", msg=f"get sheet data {name}...")
-        return self.wb.sheetnames

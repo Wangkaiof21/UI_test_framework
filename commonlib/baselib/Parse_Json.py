@@ -15,8 +15,7 @@ from commonlib.baselib.msg_center import MsgCenter
 import os
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
-# msg = MsgCenter(MODULE_NAME)
-msg = MsgCenter(MODULE_NAME)
+# MsgCenter(MODULE_NAME)
 
 BOOK_ID = "666010190"
 SLEEP_TIME = 1
@@ -407,7 +406,7 @@ def matching_dictionary_to_language(value: str, action_dict: dict):
 
 def read_txt_to_dict(fp):
     """
-    把txt里面的内容读出来 且转换成字典 用type的key去调用转换成 方法名？
+    把txt里面的内容读出来 且转换成字典 用type的key去调用转换成 ddd:方法名,方法名,方法名,方法名
     :param fp:
     :return:
     """
@@ -435,8 +434,13 @@ def write_action_book_data(action_data, excel_fp: str, start_row=2) -> None:
     :param start_row:
     :return:
     """
-    excel = Excel(excel_fp, new_flag=True)
+    # 防止重复写入数据 创建文件夹之前 先清除文件
+    for file_path, dir_list, files in os.walk(os.path.dirname(excel_fp)):
+        for file_name in files:
+            rubbish_file = os.path.join(file_path, file_name)
+            os.remove(rubbish_file)
 
+    excel = Excel(excel_fp, new_flag=True)
     for index in range(len(action_data)):
         # ch_name = str(action_data[index].keys())
         for ch, value in action_data[index].items():
