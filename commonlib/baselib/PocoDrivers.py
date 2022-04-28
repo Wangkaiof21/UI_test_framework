@@ -9,41 +9,61 @@ MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 SLEEP_TIME = 1
 
 
-def poco_find(poco, target_name: str, module_type: str, wait_time=1) -> bool:
+def poco_find(poco, target_name: str, module_type: str, wait_time=1, list_num=None) -> bool:
     """
     :param poco: poco对象
     :param target_name:控件的name属性
     :param wait_time:等待时间
     :param module_type:控件的type属性
+    :param list_num:拥有多个同级的元素 得拿下标取值的
     :return:
     """
     try:
-        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
-        if poco(target_name, type=module_type).wait(wait_time).exists():
-            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
-            return True
+        if list_num:
+            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}[{list_num}]....")
+            if poco(target_name, type=module_type)[list_num].wait(wait_time).exists():
+                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
+                return True
+        else:
+            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
+            if poco(target_name, type=module_type).wait(wait_time).exists():
+                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
+                return True
     except Exception as e:
         LogMessage(level=LOG_ERROR, module=MODULE_NAME,
                    msg=f"Wait time out ,element {target_name} not find! error -> {e}")
         return False
 
 
-def poco_try_find_click(poco, target_name: str, module_type: str) -> bool:
+def poco_try_find_click(poco, target_name: str, module_type: str, list_num=None) -> bool:
     """
     尝试寻找和点击 后面要加个功能 => 尝试等待返回结果
     :param poco: poco对象
     :param target_name:控件的name属性
     :param module_type:控件的type属性
+    :param list_num:拥有多个同级的元素 得拿下标取值的
     :return:
     """
-    if poco_find(poco=poco, target_name=target_name, module_type=module_type):
-        poco(target_name, type=module_type).click()
-        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} success!")
-        sleep(SLEEP_TIME)
-        return True
+    if list_num:
+        try:
+            if poco_find(poco=poco, target_name=target_name, module_type=module_type, list_num=list_num):
+                poco(target_name, type=module_type)[list_num].click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} success!")
+                sleep(SLEEP_TIME)
+                return True
+        except Exception as e:
+            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail! {e}")
+            return False
     else:
-        LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail!")
-        return False
+        try:
+            if poco_find(poco=poco, target_name=target_name, module_type=module_type):
+                poco(target_name, type=module_type).click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} success!")
+                sleep(SLEEP_TIME)
+                return True
+        except Exception as e:
+            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail! {e}")
+            return False
 
 
 def poco_send_text(poco, input_field: str, module_type: str, text_: str) -> bool:
@@ -89,7 +109,7 @@ def poco_try_find_offspring(poco, target_name: str, module_type: str, offspring_
         return False
 
 
-def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring_name: str,wait_time=1) -> bool:
+def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring_name: str, wait_time=1) -> bool:
     """
     尝试寻找和点击 后面要加个功能 => 尝试等待返回结果
     :param poco: poco对象
@@ -108,7 +128,6 @@ def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring
     else:
         LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail!")
         return False
-
 
 # def poco_findChild(poco, findPoco, description="", waitTime=1, tryTime=3, sleeptime=0):
 #     """用于关联父级才能找到的元素"""

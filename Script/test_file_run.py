@@ -35,9 +35,12 @@ MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 EXCEL_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../excel_package"))
 LOG_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../logs"))
 TEST_OR_NOT = 'test_or_not'
-
+TYPE = "type"
+DIALOG_TYPE = "dialog_type"
 
 MsgCenter(MODULE_NAME)
+
+
 # MsgCenter(MODULE_NAME, level=LOG_DEBUG)
 
 class DeviceRun:
@@ -46,26 +49,33 @@ class DeviceRun:
     """
 
     def __init__(self, adb=AdbConnect(), app_name="com.stardust.spotlight", ip="127.0.0.1:5037",
-                 local_host="local_host", port=5001, log_fp=LOG_FILES_PATH):
-        try:
-            # adb模块实例化
-            self.adb = adb
-            # 获取 device 设备号
-            self.device = adb.get_dev_name()
-            self.log = log_fp
-            self.app_name = app_name
-            # 链接adb
-            self.adb.connect_device(ip=ip, devices_names=self.device, log_path=self.log)
-            # 唤醒机器和打开app
-            phone_wake(G.DEVICE)
-            stop_game(G.DEVICE, self.app_name)
-            start_game(G.DEVICE, self.app_name)
-            sleep(14)
-            # 实例化poco 给下面的函数调
-            self.poco = UnityPoco((local_host, port))
-            self.excel_path = EXCEL_FILES_PATH
-        except Exception as e:
-            LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
+                 local_host="local_host", port=5001, log_fp=LOG_FILES_PATH, test_mode=True):
+        self.test_mode = test_mode
+        if self.test_mode:
+            try:
+                # adb模块实例化
+                self.adb = adb
+                # 获取 device 设备号
+                self.device = adb.get_dev_name()
+                self.log = log_fp
+                self.app_name = app_name
+                # 链接adb
+                self.adb.connect_device(ip=ip, devices_names=self.device, log_path=self.log)
+                # 唤醒机器和打开app
+                phone_wake(G.DEVICE)
+                stop_game(G.DEVICE, self.app_name)
+                start_game(G.DEVICE, self.app_name)
+                sleep(14)
+                # 实例化poco 给下面的函数调
+                self.poco = UnityPoco((local_host, port))
+                self.excel_path = EXCEL_FILES_PATH
+            except Exception as e:
+                LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
+        else:
+            try:
+                self.excel_path = EXCEL_FILES_PATH
+            except Exception as e:
+                LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
 
     def initial_data(self) -> dict:
         """
@@ -74,19 +84,6 @@ class DeviceRun:
 
         :return: 返回{书籍名:[章节名1，章节名2，章节名3.......],书籍名:[章节名1，章节名2，章节名3.......]}
         """
-        # book_list = list()
-        # name_list = list()
-        # for file_path, dir_list, files in os.walk(self.excel_path):
-        #     for file_name in files:
-        #         if file_name.endswith(".xlsx"):
-        #             name_list.append(file_name.split(".")[0])
-        #             book_list.append(os.path.join(file_path, file_name))
-        # books_ = dict()
-        # for index in range(len(name_list)):
-        #     excel = Excel(book_list[index])
-        #     result = excel.get_sheet_names("")
-        #     books_[name_list[index]] = result
-
         book_abs_path = ""
         for file_path, dir_list, files in os.walk(self.excel_path):
             for file_name in files:
@@ -119,6 +116,9 @@ class DeviceRun:
                 # 这里需要空点一下 以退出输入框
                 touch([0.5, 0.5])
                 poco_try_find_click(self.poco, target_name="SearchBook(Clone)", module_type="Node")
+                # 重置书籍
+                poco_try_find_click(self.poco, target_name="Reset", module_type="Node")
+                poco_try_find_click(self.poco, target_name="ComfirmBtn", module_type="Button")
                 return True
             else:
                 # 如果没有搜索到书本则直接关掉游戏 或者等其他处理
@@ -137,33 +137,18 @@ class DeviceRun:
         :param records:
         :return:
         """
-        # books_ = dict()
-        # for book_abs, sheet_names in records.items():
-        #     book_name = os.path.basename(book_abs).split(".")[0]
-        #     # self.search_book(book_name)
-        #     excel = Excel(book_abs)
-        #     # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
-        #     clean_dict = dict()
-        #     for sheet_ in sheet_names:
-        #         clean_list = list()
-        #         ch_result = excel.records_get(sheet_)
-        #         for line in ch_result:
-        #             if line[TEST_OR_NOT] != "yes":
-        #                 continue
-        #             clean_list.append(line)
-        #         clean_dict[sheet_] = clean_list
-        #     books_[book_name] = clean_dict
-
         books_ = dict()
         (book_abs, sheets_list), = records.items()
         book_name = os.path.basename(book_abs).split(".")[0]
-        if self.search_book(book_name):
+
+        if not self.test_mode:
             excel = Excel(book_abs)
             # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
             clean_dict = dict()
             for sheet_ in sheets_list:
                 clean_list = list()
                 ch_result = excel.records_get(sheet_)
+                # 筛选出带yes标记的信息
                 for line in ch_result:
                     if line[TEST_OR_NOT] != "yes":
                         continue
@@ -176,10 +161,74 @@ class DeviceRun:
                 for ch_num, ch_page_data in datas.items():
                     LogMessage(level=LOG_INFO, module=MODULE_NAME,
                                msg=f"Chapter_No.{ch_num} -> Test page -> {ch_page_data}")
+        else:
+            if self.search_book(book_name):
+                excel = Excel(book_abs)
+                # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
+                clean_dict = dict()
+                for sheet_ in sheets_list:
+                    clean_list = list()
+                    ch_result = excel.records_get(sheet_)
+                    # 筛选出带yes标记的信息
+                    for line in ch_result:
+                        if line[TEST_OR_NOT] != "yes":
+                            continue
+                        clean_list.append(line)
+                    clean_dict[sheet_] = clean_list
+                books_[book_name] = clean_dict
+
+                for book_name, datas in books_.items():
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Test book -> {book_name}")
+                    for ch_num, ch_page_data in datas.items():
+                        LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                                   msg=f"Chapter_No.{ch_num} -> Test page -> {ch_page_data}")
         return books_
+
+    def select_chapters_first_entry(self, book_datas):
+        """
+        这里假设是从第一章节读起 后续要做成只读某几章节
+        :param book_datas:
+        :return:
+        """
+        (book_name, chapters_value), = book_datas.items()
+        sleep(1)
+        for key, value in chapters_value.items():
+            if not value:
+                continue
+            # 章节名的最后一个数字 做选章节的操作 这个其实不够保险
+            ch_index = int(key[-1]) - 1
+            # if ch_index == 0:
+            #     poco_try_find_click(self.poco, target_name="Search", module_type="Node", list_num=ch_index)
+            #     poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+            # else:
+            #     poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+            # 章节的条目数据 就是每一步的行动数据 对这个精细操作
+            entry_data = value
+            self.read_chapters(entry_data)
+            break
+
+    def read_chapters(self, entry_data):
+        """
+        不需要处理状况 根据条目的内容 实例化方法
+        :param entry_data:
+        :return:
+        """
+        try:
+            for line in entry_data:
+                print(line[TYPE], "     ", line[DIALOG_TYPE])
+                # 先解析两个type里面有什么东西
+                # 这里直接转换成方法试试？
+
+
+
+
+        except Exception as e:
+            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Read entry error -> {e}! ")
 
 
 if __name__ == '__main__':
-    test = DeviceRun()
+    test = DeviceRun(test_mode=False)
     res = test.initial_data()
-    test.wash_the_books_action(res)
+    res_dict = test.wash_the_books_action(res)
+    test.select_chapters_first_entry(res_dict)
+    # 有时间新建一个测试mode
