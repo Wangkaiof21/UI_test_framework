@@ -5,7 +5,7 @@ import os
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 # msg = MsgCenter(MODULE_NAME)
-msg = MsgCenter(MODULE_NAME, level=LOG_DEBUG)
+# msg = MsgCenter(MODULE_NAME, level=LOG_DEBUG)
 
 import json
 from operator import itemgetter
@@ -152,13 +152,15 @@ def write_action_boot_data(book_action_data, excel_fp: str) -> None:
             excel.records_write(ch, records=value, start_row=None)
 
 
-if __name__ == '__main__':
-    path = os.path.abspath(os.path.join(os.getcwd(), "parse_data_files"))
-    # path =  os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
 
-    # txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_dict.txt"))
-    txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_book.txt"))
-    excel_path = os.path.abspath(os.path.join(os.getcwd(), "action_.xlsx"))
-    result_dict = read_txt_to_dict(txt_path)
-    results = read_json_to_files(path, action_dict=result_dict)
-    write_action_boot_data(book_action_data=results, excel_fp=excel_path)
+
+# if __name__ == '__main__':
+#     path = os.path.abspath(os.path.join(os.getcwd(), "parse_data_files"))
+#     # path =  os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
+#
+#     # txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_dict.txt"))
+#     txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_book.txt"))
+#     excel_path = os.path.abspath(os.path.join(os.getcwd(), "action_.xlsx"))
+#     result_dict = read_txt_to_dict(txt_path)
+#     results = read_json_to_files(path, action_dict=result_dict)
+#     write_action_boot_data(book_action_data=results, excel_fp=excel_path)
