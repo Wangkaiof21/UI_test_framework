@@ -18,51 +18,14 @@ MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 MsgCenter(MODULE_NAME)
 
 BOOK_ID = "666010190"
+# BOOK_ID = "10190"
 SLEEP_TIME = 1
 TYPE = "type"
 DIALOG_TYPE = "dialog_type"
 CONTENT = "content"
 ITEM_LIST = 'item_list'
 TEST_OR_NOT = 'test_or_not'
-
-
-def list_add(test_list: list):
-    node_ = []
-    for ele in test_list:
-        node_ += ele
-    return node_
-
-
-def get_json_file_path(json_path):
-    """
-    从路径获取所有json
-    :param json_path:
-    :return:
-    """
-    index = 0
-    path_list = list()
-    full_path = os.walk(json_path)
-    for file_path, dir_list, files in full_path:
-        for file_name in files:
-            if file_name.endswith(".txt"):
-                path_list.append(os.path.join(file_path, file_name))
-                print(f"章节文件 --> {os.path.join(file_path, file_name)}")
-                index += 1
-    print(f"一共{index}个章节")
-    return path_list
-
-
-def read_json_to_dict(fp):
-    """
-
-    :param fp:
-    :return:
-    """
-    json_path_list = get_json_file_path(fp)
-    for name in json_path_list:
-        with open(name, "r", encoding="utf-8") as r:
-            new_dict = json.loads(r.read())
-        # 配置数据太麻烦 通过端口拉运行数据
+DEBUG_ = True
 
 
 # 加密
@@ -83,7 +46,7 @@ def concatenate_strings(data1, data2):
     return data_
 
 
-def get_app_login_token(debug=True, secret="56a354ec", did="zpf0001"):
+def get_app_login_token(debug=DEBUG_, secret="56a354ec", did="zpf0001"):
     """
 
     :param debug: 选择服务器
@@ -124,7 +87,7 @@ def get_app_login_token(debug=True, secret="56a354ec", did="zpf0001"):
     except Exception as e:
         raise e
     token = response.json()["data"]["access_token"]
-
+    print(f"token --> {token}")
     return token
 
 
@@ -147,7 +110,7 @@ def ini_common_header() -> dict:
     return result
 
 
-def get_test_url(debug=True):
+def get_test_url(debug=DEBUG_):
     """
 
     :param debug:
@@ -163,7 +126,7 @@ def get_test_url(debug=True):
         return url
 
 
-def get_book_chapter_id_result(token, story_chapter_ids: list, debug=True, secret="56a354ec", did="zpf0001",
+def get_book_chapter_id_result(token, story_chapter_ids: list, debug=DEBUG_, secret="56a354ec", did="zpf0001",
                                story_id_change=False, change_id="6660"):
     """
     666010190001 实际上是6660 1019+0001 书籍的id + ？
@@ -229,7 +192,7 @@ def list_to_str(d_list):
     return ret_str
 
 
-def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec", did="zpf0001"):
+def for_story_id_get_chapter_ids(story_id, token, debug=DEBUG_, secret="56a354ec", did="zpf0001"):
     """
     获取故事id的list
     :param token:
@@ -240,6 +203,7 @@ def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec",
     :return:
     """
     url = get_test_url(debug)
+    print("ddd-->", url)
     uri = "/story/show/"
     # 'version': '3.151.1',
     common_header = ini_common_header()
@@ -261,8 +225,10 @@ def for_story_id_get_chapter_ids(story_id, token, debug=True, secret="56a354ec",
         response = requests.request("GET", url + uri, headers=common_header, params=payload)
     except Exception as e:
         raise e
+    print(repr(response.json()))
     book_name = response.json()['data']['name']
     chapter_ids = response.json()["data"]["chapter_ids"]
+    print("00019", chapter_ids)
     return chapter_ids, book_name
 
 
@@ -515,30 +481,71 @@ def write_action_book_data(action_data, excel_fp: str, start_row=2) -> None:
     excel.save(backup=False)
 
 
+# def get_book_id(debug=DEBUG_):
+#     """
+#
+#     :param debug:
+#     :return:
+#     """
+#     # BOOK_ID = "666010190"
+#     BOOK_ID = "10190"
+#     if debug:
+#         # 测试服HOST
+#         url = "http://project_x_api.stardustworld.cn/api/v1"
+#         return url
+#     else:
+#         # 审核服HOST
+#         url = "http://dev_spt_aws_game_api.stardustgod.com/api/v1"
+#         return url
+
+
+
 def main():
-    parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
+    if DEBUG_:
+        parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
+        # 获取token
+        token = get_app_login_token()
+        # 获取书籍章节列表,书籍名字
+        ids, bk_name = for_story_id_get_chapter_ids(BOOK_ID, token)
+        # 拼接书籍章节列表
+        result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
+        # 获取 action type 对应的字典
+        txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
+        txt_result_dict = read_txt_to_dict(txt_path)
+        # 获取 lua type 对应的字典
+        lua_path = os.path.abspath(os.path.join(os.getcwd(), "../../StoryDialogType.lua"))
+        lua_result_dict = read_lua_to_dict(lua_path)
+        # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
+        results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=txt_result_dict,
+                                            lua_action_dict=lua_result_dict)
+        # 把action data 写入进 xlsx 中等待解析
+        new_excel_name = f"../../excel_package/{bk_name}.xlsx"
+        excel_path = os.path.abspath(os.path.join(os.getcwd(), new_excel_name))
+        write_action_book_data(action_data=results, excel_fp=excel_path)
+    elif not DEBUG_:
+        parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
+        # 获取token
+        token = get_app_login_token()
+        # 获取书籍章节列表,书籍名字
+        ids, bk_name = for_story_id_get_chapter_ids(BOOK_ID, token)
+        # 拼接书籍章节列表
+        result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
+        # 获取 action type 对应的字典
+        txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
+        txt_result_dict = read_txt_to_dict(txt_path)
+        # 获取 lua type 对应的字典
+        lua_path = os.path.abspath(os.path.join(os.getcwd(), "../../StoryDialogType.lua"))
+        lua_result_dict = read_lua_to_dict(lua_path)
+        # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
+        results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=txt_result_dict,
+                                            lua_action_dict=lua_result_dict)
+        # 把action data 写入进 xlsx 中等待解析
+        new_excel_name = f"../../excel_package/{bk_name}.xlsx"
+        excel_path = os.path.abspath(os.path.join(os.getcwd(), new_excel_name))
+        write_action_book_data(action_data=results, excel_fp=excel_path)
+    else:
+        raise ImportError
 
-    # 获取token
-    token = get_app_login_token()
-    # 获取书籍章节列表,书籍名字
-    ids, bk_name = for_story_id_get_chapter_ids(BOOK_ID, token)
-    # 拼接书籍章节列表
-    result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
-
-    # 获取 action type 对应的字典
-    txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
-    txt_result_dict = read_txt_to_dict(txt_path)
-    # 获取 lua type 对应的字典
-    lua_path = os.path.abspath(os.path.join(os.getcwd(), "../../StoryDialogType.lua"))
-    lua_result_dict = read_lua_to_dict(lua_path)
-
-    # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
-    results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=txt_result_dict,
-                                        lua_action_dict=lua_result_dict)
-    # 把action data 写入进 xlsx 中等待解析
-    new_excel_name = f"../../excel_package/{bk_name}.xlsx"
-    excel_path = os.path.abspath(os.path.join(os.getcwd(), new_excel_name))
-    write_action_book_data(action_data=results, excel_fp=excel_path)
 
 
 if __name__ == '__main__':

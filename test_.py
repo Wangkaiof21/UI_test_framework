@@ -168,12 +168,12 @@ def read_lua_to_dict(fp):
     return action_name_dict
 
 
-if __name__ == '__main__':
-    file_ = "C:\\Users\\王凯\Desktop\\test_file\\UI_test_framework\\parse_data_files\\"
-    txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_book.txt"))
-    lua_path = os.path.abspath(os.path.join(os.getcwd(), "StoryDialogType.lua"))
-    txt_result_dict = read_txt_to_dict(txt_path)
-
-    lua_result_dict = read_lua_to_dict(lua_path)
-
-    wash_action_datas(file_, txt_result_dict, lua_result_dict)
+# if __name__ == '__main__':
+#     file_ = "C:\\Users\\王凯\Desktop\\test_file\\UI_test_framework\\parse_data_files\\"
+#     txt_path = os.path.abspath(os.path.join(os.getcwd(), "action_book.txt"))
+#     lua_path = os.path.abspath(os.path.join(os.getcwd(), "StoryDialogType.lua"))
+#     txt_result_dict = read_txt_to_dict(txt_path)
+#
+#     lua_result_dict = read_lua_to_dict(lua_path)
+#
+#     wash_action_datas(file_, txt_result_dict, lua_result_dict)

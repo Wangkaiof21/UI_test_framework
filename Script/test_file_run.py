@@ -24,7 +24,12 @@ from commonlib.baselib.excel import Excel
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 from commonlib.baselib.ControlAdb import phone_wake, start_game, stop_game
-from commonlib.baselib.PocoDrivers import poco_try_find_click, poco_try_offspring_click, poco_find
+
+from commonlib.baselib.PocoDrivers import poco_try_find_click, poco_try_offspring_click, poco_find, \
+    poco_play_dialog_rename, \
+    poco_play_dialog, poco_select_skin, poco_cosplay_cossuit, poco_play_dialog_monologue, poco_play_dialog_voiceover, \
+    poco_play_dialog_dialog_noshow, \
+    poco_play_dialog, poco_play_dialog_think, poco_play_dialog_dialog
 
 from commonlib.baselib.ConnectAdb import AdbConnect
 from poco.drivers.unity3d import UnityPoco
@@ -37,6 +42,7 @@ LOG_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../logs"))
 TEST_OR_NOT = 'test_or_not'
 TYPE = "type"
 DIALOG_TYPE = "dialog_type"
+EXECUTABLE_LIST = ["select_skin", "play_dialog", "cosplay_cossuit"]
 
 MsgCenter(MODULE_NAME)
 
@@ -49,9 +55,10 @@ class DeviceRun:
     """
 
     def __init__(self, adb=AdbConnect(), app_name="com.stardust.spotlight", ip="127.0.0.1:5037",
-                 local_host="local_host", port=5001, log_fp=LOG_FILES_PATH, test_mode=True):
+                 local_host="local_host", port=5001, log_fp=LOG_FILES_PATH, test_mode=False):
         self.test_mode = test_mode
-        if self.test_mode:
+
+        if not self.test_mode:
             try:
                 # adb模块实例化
                 self.adb = adb
@@ -142,46 +149,28 @@ class DeviceRun:
         book_name = os.path.basename(book_abs).split(".")[0]
 
         if not self.test_mode:
-            excel = Excel(book_abs)
-            # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
-            clean_dict = dict()
-            for sheet_ in sheets_list:
-                clean_list = list()
-                ch_result = excel.records_get(sheet_)
-                # 筛选出带yes标记的信息
-                for line in ch_result:
-                    if line[TEST_OR_NOT] != "yes":
-                        continue
-                    clean_list.append(line)
-                clean_dict[sheet_] = clean_list
-            books_[book_name] = clean_dict
+            self.search_book(book_name)
 
-            for book_name, datas in books_.items():
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Test book -> {book_name}")
-                for ch_num, ch_page_data in datas.items():
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"Chapter_No.{ch_num} -> Test page -> {ch_page_data}")
-        else:
-            if self.search_book(book_name):
-                excel = Excel(book_abs)
-                # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
-                clean_dict = dict()
-                for sheet_ in sheets_list:
-                    clean_list = list()
-                    ch_result = excel.records_get(sheet_)
-                    # 筛选出带yes标记的信息
-                    for line in ch_result:
-                        if line[TEST_OR_NOT] != "yes":
-                            continue
-                        clean_list.append(line)
-                    clean_dict[sheet_] = clean_list
-                books_[book_name] = clean_dict
+        excel = Excel(book_abs)
+        # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
+        clean_dict = dict()
+        for sheet_ in sheets_list:
+            clean_list = list()
+            ch_result = excel.records_get(sheet_)
+            # 筛选出带yes标记的信息
+            for line in ch_result:
+                if line[TEST_OR_NOT] != "yes":
+                    continue
+                clean_list.append(line)
+            clean_dict[sheet_] = clean_list
+        books_[book_name] = clean_dict
 
-                for book_name, datas in books_.items():
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Test book -> {book_name}")
-                    for ch_num, ch_page_data in datas.items():
-                        LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                                   msg=f"Chapter_No.{ch_num} -> Test page -> {ch_page_data}")
+        for book_name, datas in books_.items():
+            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Test book -> {book_name}")
+            for ch_num, ch_page_data in datas.items():
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Chapter_No.{ch_num} -> Test page -> {ch_page_data}")
+
         return books_
 
     def select_chapters_first_entry(self, book_datas):
@@ -197,11 +186,14 @@ class DeviceRun:
                 continue
             # 章节名的最后一个数字 做选章节的操作 这个其实不够保险
             ch_index = int(key[-1]) - 1
-            # if ch_index == 0:
-            #     poco_try_find_click(self.poco, target_name="Search", module_type="Node", list_num=ch_index)
-            #     poco_try_find_click(self.poco, target_name="Play", module_type="Node")
-            # else:
-            #     poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+            print("ch_____________________", ch_index)
+            if ch_index == 0:
+                poco_try_find_click(self.poco, target_name="Search", module_type="Node", list_num=ch_index)
+                poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+                sleep(7)
+            else:
+                poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+                sleep(7)
             # 章节的条目数据 就是每一步的行动数据 对这个精细操作
             entry_data = value
             self.read_chapters(entry_data)
@@ -214,21 +206,49 @@ class DeviceRun:
         :return:
         """
         try:
+            index = 1
             for line in entry_data:
-                print(line[TYPE], "     ", line[DIALOG_TYPE])
+                self.confirm_executable_method(line[TYPE], line[DIALOG_TYPE], index)
                 # 先解析两个type里面有什么东西
                 # 这里直接转换成方法试试？
-
-
-
-
+                index += 1
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Read entry error -> {e}! ")
 
+    def confirm_executable_method(self, type_str: str, dialog_type_str: str, index_):
+        """
+        切割字符串 获取list
+        :param type_str:
+        :param dialog_type_str:
+        :param index_:条目数量
+        :return:
+        """
+        try:
+            dialog_type_str = self.gen_str(dialog_type_str)
+            # 可执行动作的list 多个行动对多个行动不好处理
+            func_names = type_str.split(",")[:-1]
+            for func_name in func_names:
+                if EXECUTABLE_LIST.count(func_name) > 0 and dialog_type_str:
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                               msg=f"{index_} Func start -> poco_{func_name}_{dialog_type_str}")
+                    globals()[f"poco_{func_name}_{dialog_type_str}"](self.poco)
+                elif EXECUTABLE_LIST.count(func_name) > 0 and not dialog_type_str:
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                               msg=f"{index_} Func start -> poco_{func_name}")
+                    globals()[f"poco_{func_name}"](self.poco)
+        except Exception as e:
+            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Func error -> {e}")
+
+    def gen_str(self, d_type_str):
+        if not d_type_str:
+            return ""
+        else:
+            return d_type_str.split(",")[0]
+
 
 if __name__ == '__main__':
-    test = DeviceRun(test_mode=False)
+    test = DeviceRun()
+    # test = DeviceRun(test_mode=True)
     res = test.initial_data()
     res_dict = test.wash_the_books_action(res)
     test.select_chapters_first_entry(res_dict)
-    # 有时间新建一个测试mode
