@@ -1,14 +1,9 @@
-import json
-import os
-
 import requests
 import time
 import hmac
 import random
 import zipfile
 import json
-from operator import itemgetter
-from itertools import groupby
 from commonlib.baselib.excel import Excel
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
@@ -167,6 +162,9 @@ def get_book_chapter_id_result(token, story_chapter_ids: list, debug=DEBUG_, sec
         common_header['noise'] = str(random.randrange(100, 999))
         common_header['did'] = did
         common_header["authorization"] = "Bearer" + " " + token
+        print(full_id)
+        print(repr(common_header))
+        print(url + uri)
         try:
             response = requests.request("GET", url + uri, headers=common_header, params=payload)
             action_file_path = response.json().get("data").get("action_file").get("path")
@@ -174,14 +172,10 @@ def get_book_chapter_id_result(token, story_chapter_ids: list, debug=DEBUG_, sec
         except Exception as e:
             raise e
         time.sleep(SLEEP_TIME)
+
+        break
+
     return zip_path_list
-
-
-# def list_add(test_list: list):
-#     node_ = []
-#     for ele in test_list:
-#         node_ += ele
-#     return node_
 
 
 def list_to_str(d_list):
@@ -203,7 +197,6 @@ def for_story_id_get_chapter_ids(story_id, token, debug=DEBUG_, secret="56a354ec
     :return:
     """
     url = get_test_url(debug)
-    print("ddd-->", url)
     uri = "/story/show/"
     # 'version': '3.151.1',
     common_header = ini_common_header()
@@ -481,25 +474,6 @@ def write_action_book_data(action_data, excel_fp: str, start_row=2) -> None:
     excel.save(backup=False)
 
 
-# def get_book_id(debug=DEBUG_):
-#     """
-#
-#     :param debug:
-#     :return:
-#     """
-#     # BOOK_ID = "666010190"
-#     BOOK_ID = "10190"
-#     if debug:
-#         # 测试服HOST
-#         url = "http://project_x_api.stardustworld.cn/api/v1"
-#         return url
-#     else:
-#         # 审核服HOST
-#         url = "http://dev_spt_aws_game_api.stardustgod.com/api/v1"
-#         return url
-
-
-
 def main():
     if DEBUG_:
         parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
@@ -509,43 +483,22 @@ def main():
         ids, bk_name = for_story_id_get_chapter_ids(BOOK_ID, token)
         # 拼接书籍章节列表
         result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
-        # 获取 action type 对应的字典
-        txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
-        txt_result_dict = read_txt_to_dict(txt_path)
-        # 获取 lua type 对应的字典
-        lua_path = os.path.abspath(os.path.join(os.getcwd(), "../../StoryDialogType.lua"))
-        lua_result_dict = read_lua_to_dict(lua_path)
-        # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
-        results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=txt_result_dict,
-                                            lua_action_dict=lua_result_dict)
-        # 把action data 写入进 xlsx 中等待解析
-        new_excel_name = f"../../excel_package/{bk_name}.xlsx"
-        excel_path = os.path.abspath(os.path.join(os.getcwd(), new_excel_name))
-        write_action_book_data(action_data=results, excel_fp=excel_path)
-    elif not DEBUG_:
-        parse_path = os.path.abspath(os.path.join(os.getcwd(), "../../parse_data_files"))
-        # 获取token
-        token = get_app_login_token()
-        # 获取书籍章节列表,书籍名字
-        ids, bk_name = for_story_id_get_chapter_ids(BOOK_ID, token)
-        # 拼接书籍章节列表
-        result_list = get_book_chapter_id_result(token, ids, story_id_change=True, change_id="6660")
-        # 获取 action type 对应的字典
-        txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
-        txt_result_dict = read_txt_to_dict(txt_path)
-        # 获取 lua type 对应的字典
-        lua_path = os.path.abspath(os.path.join(os.getcwd(), "../../StoryDialogType.lua"))
-        lua_result_dict = read_lua_to_dict(lua_path)
-        # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
-        results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=txt_result_dict,
-                                            lua_action_dict=lua_result_dict)
-        # 把action data 写入进 xlsx 中等待解析
-        new_excel_name = f"../../excel_package/{bk_name}.xlsx"
-        excel_path = os.path.abspath(os.path.join(os.getcwd(), new_excel_name))
-        write_action_book_data(action_data=results, excel_fp=excel_path)
-    else:
-        raise ImportError
 
+        # 获取 action type 对应的字典
+        txt_path = os.path.abspath(os.path.join(os.getcwd(), "../../action_book.txt"))
+        txt_result_dict = read_txt_to_dict(txt_path)
+        # 获取 lua type 对应的字典
+        lua_path = os.path.abspath(os.path.join(os.getcwd(), "../../StoryDialogType.lua"))
+        lua_result_dict = read_lua_to_dict(lua_path)
+
+        # 发起网络请求 获得action zip ，解压，删除zip文件获取txt文件，读取txt文件组装成一本书的action数据结构
+        results = parse_action_list_to_json(result_list, save_path=parse_path, action_dict=txt_result_dict,
+                                            lua_action_dict=lua_result_dict)
+
+        # 把action data 写入进 xlsx 中等待解析
+        new_excel_name = f"../../excel_package/{bk_name}.xlsx"
+        excel_path = os.path.abspath(os.path.join(os.getcwd(), new_excel_name))
+        write_action_book_data(action_data=results, excel_fp=excel_path)
 
 
 if __name__ == '__main__':
