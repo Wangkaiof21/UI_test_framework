@@ -12,7 +12,7 @@ import random
 import zipfile
 import json
 from commonlib.baselib.excel import Excel
-from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
+from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 import os
 from commonlib.baselib.Config import ConfigView
@@ -219,7 +219,7 @@ class InitExcelData:
         :return:
         """
         target_url_a = "http://spt-cdn.stardustgod.com/spt/"
-        target_url_b = "http://spt-akamai.stardustgod.com/spt/"
+        # target_url_b = "http://spt-akamai.stardustgod.com/spt/"
         if not os.listdir(save_path):
             LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Path is clean")
             pass

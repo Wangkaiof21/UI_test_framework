@@ -6,6 +6,9 @@
 # @File    : Config.py
 # @Software: PyCharm
 # 请求头json数据 和一些配置
+import os
+
+
 class ConfigView:
     LOGIN_HEADER = {
         'timestamp': '',
@@ -18,3 +21,6 @@ class ConfigView:
         'Accept-Language': 'en',
         'dievel': '_medium'
     }
+    EXECUTABLE_LIST = ["select_skin", "play_dialog", "cosplay_cossuit", "option_list"]
+    EXCEL_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../../excel_package"))
+    LOG_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../../logs"))

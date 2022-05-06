@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2022/4/25 15:13
+# @Time    : 2022/5/6 10:41
 # @Author  : WangKai
 # @Site    : 
-# @File    : test_file_run.py
+# @File    : config_drive.py
 # @Software: PyCharm
-
 """
+需求：
 读取excel内容 获取到 {新增excel 读取信息模块}
 1。需要获取书名 章节名 初始化进入章节检测到内容 则为成功
 
@@ -18,13 +18,14 @@
 匹配book章节key 精准找到目标书本的章节{需要一个可靠的搜索方法，}
 生成阅读每一页的 行动列表->list
 循环每一页的行动列表 实例化相对应的方法 从而实现自动化
+5.1348
 """
 
 from commonlib.baselib.excel import Excel
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 from commonlib.baselib.ControlAdb import phone_wake, start_game, stop_game
-
+from commonlib.baselib.Config import ConfigView
 from commonlib.baselib.PocoDrivers import poco_try_find_click, poco_try_offspring_click, poco_find, \
     poco_play_dialog_rename, \
     poco_play_dialog, poco_select_skin, poco_cosplay_cossuit, poco_play_dialog_monologue, poco_play_dialog_voiceover, \
@@ -37,12 +38,9 @@ from airtest.core.api import G, sleep, text, touch
 import os
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
-EXCEL_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../excel_package"))
-LOG_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../logs"))
 TEST_OR_NOT = 'test_or_not'
 TYPE = "type"
 DIALOG_TYPE = "dialog_type"
-EXECUTABLE_LIST = ["select_skin", "play_dialog", "cosplay_cossuit"]
 
 MsgCenter(MODULE_NAME)
 
@@ -51,19 +49,21 @@ MsgCenter(MODULE_NAME)
 
 class DeviceRun:
     """
-    这里写的很烂
+    这里写的不好
+    test_mode模式是测试用 只读取excel数据不进行手机的初始化
+    test_mode模式为True则 初始化机器 唤醒 和打开app 把app的sdk poco实例化给self.poco
     """
 
-    def __init__(self, adb=AdbConnect(), app_name="com.stardust.spotlight", ip="127.0.0.1:5037",
-                 local_host="local_host", port=5001, log_fp=LOG_FILES_PATH, test_mode=False):
+    def __init__(self, app_name="com.stardust.spotlight", ip="127.0.0.1:5037",
+                 local_host="local_host", port=5001, log_fp=None, test_mode=False, excel_path=None):
         self.test_mode = test_mode
 
         if not self.test_mode:
             try:
                 # adb模块实例化
-                self.adb = adb
+                self.adb = AdbConnect()
                 # 获取 device 设备号
-                self.device = adb.get_dev_name()
+                self.device = self.adb.get_dev_name()
                 self.log = log_fp
                 self.app_name = app_name
                 # 链接adb
@@ -75,12 +75,12 @@ class DeviceRun:
                 sleep(14)
                 # 实例化poco 给下面的函数调
                 self.poco = UnityPoco((local_host, port))
-                self.excel_path = EXCEL_FILES_PATH
+                self.excel_path = excel_path
             except Exception as e:
                 LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
         else:
             try:
-                self.excel_path = EXCEL_FILES_PATH
+                self.excel_path = ConfigView.EXCEL_FILES_PATH
             except Exception as e:
                 LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
 
@@ -95,12 +95,12 @@ class DeviceRun:
         for file_path, dir_list, files in os.walk(self.excel_path):
             for file_name in files:
                 if file_name.endswith(".xlsx"):
-                    # name_ = file_name.split(".")[0]
                     book_abs_path = os.path.join(file_path, file_name)
         book = dict()
         excel = Excel(book_abs_path)
         sheet_names = excel.sheet_list
         book[book_abs_path] = sheet_names
+        print(book)
         return book
 
     def search_book(self, book_name="") -> bool:
@@ -186,7 +186,6 @@ class DeviceRun:
                 continue
             # 章节名的最后一个数字 做选章节的操作 这个其实不够保险
             ch_index = int(key[-1]) - 1
-            print("ch_____________________", ch_index)
             if ch_index == 0:
                 poco_try_find_click(self.poco, target_name="Search", module_type="Node", list_num=ch_index)
                 poco_try_find_click(self.poco, target_name="Play", module_type="Node")
@@ -228,11 +227,11 @@ class DeviceRun:
             # 可执行动作的list 多个行动对多个行动不好处理
             func_names = type_str.split(",")[:-1]
             for func_name in func_names:
-                if EXECUTABLE_LIST.count(func_name) > 0 and dialog_type_str:
+                if ConfigView.EXECUTABLE_LIST.count(func_name) > 0 and dialog_type_str:
                     LogMessage(level=LOG_INFO, module=MODULE_NAME,
                                msg=f"{index_} Func start -> poco_{func_name}_{dialog_type_str}")
                     globals()[f"poco_{func_name}_{dialog_type_str}"](self.poco)
-                elif EXECUTABLE_LIST.count(func_name) > 0 and not dialog_type_str:
+                elif ConfigView.EXECUTABLE_LIST.count(func_name) > 0 and not dialog_type_str:
                     LogMessage(level=LOG_INFO, module=MODULE_NAME,
                                msg=f"{index_} Func start -> poco_{func_name}")
                     globals()[f"poco_{func_name}"](self.poco)
@@ -247,8 +246,8 @@ class DeviceRun:
 
 
 if __name__ == '__main__':
-    test = DeviceRun()
-    # test = DeviceRun(test_mode=True)
+    # test = DeviceRun(excel_path=EXCEL_FILES_PATH, log_fp=LOG_FILES_PATH)
+    test = DeviceRun(test_mode=True, excel_path=ConfigView.EXCEL_FILES_PATH, log_fp=ConfigView.LOG_FILES_PATH)
     res = test.initial_data()
     res_dict = test.wash_the_books_action(res)
     test.select_chapters_first_entry(res_dict)

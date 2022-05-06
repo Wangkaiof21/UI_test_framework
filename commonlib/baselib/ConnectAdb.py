@@ -14,7 +14,6 @@ class AdbConnect:
         链接手机端 调用方法
         auto_setup(__file__, devices=["Android://127.0.0.1:5037/SJE5T17B17","Android://127.0.0.1:5037/SJE5T17B18"])
         这里设计的有问题 丑 得改 先用着
-
         :param ip:本地ip 貌似是固定的
         :param devices_names:从adb devices获取列表【】
         :param adb_path:这个是adb.exe的绝对路径 设置了环境变量后 已经废弃使用这个参数
@@ -36,12 +35,6 @@ class AdbConnect:
                     return True
                 except Exception as e:
                     LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Connect failed error :{e} try again")
-                    # sleep(2)
-                    # for line in self.get_dev_name():
-                    #     conf = f"android://{ip}/{line}"
-                    #     LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Try Connect to {conf}")
-                    #     auto_setup(__file__, logdir=log_path, devices=[conf + method, ], project_root=BASE_DIR,
-                    #                compress=compression_ratio)
                     return False
 
     @staticmethod
