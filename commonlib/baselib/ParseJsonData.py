@@ -25,7 +25,15 @@ TYPE = "type"
 DIALOG_TYPE = "dialog_type"
 CONTENT = "content"
 ITEM_LIST = 'item_list'
+
+
 TEST_OR_NOT = 'test_or_not'
+ID = 'id'
+DIALOG_ID = 'dialog_id'
+INSTANCE_ID = 'instance_id'
+DIALOG_NO = 'dialog_no'
+BRANCH_TREE = 'branch_tree'
+
 
 DID = "zpf0001"
 
@@ -324,7 +332,7 @@ class InitExcelData:
             result_dict = dict()
             # 这里要做双重转换 step 1 根据lua文件转换
             result_dict[DIALOG_TYPE] = self.matching_dictionary_to_language(
-                str(line.get("content").get("dialog_type", "")), lua_file_data)
+                str(line.get(CONTENT).get(DIALOG_TYPE, "")), lua_file_data)
 
             # 这里要做双重转换 step 2 根据action_list.txt文件转换
             result_dict[TYPE] = self.matching_dictionary_to_language(str(line.get(TYPE)), txt_file_data)
@@ -338,13 +346,15 @@ class InitExcelData:
     def init_new_line(self, line_dict: dict, item_data: dict) -> dict:
         """根据传入值新建新的字典"""
         result = dict()
-        result['id'] = line_dict.get('id')
-        result['dialog_id'] = line_dict.get('dialog_id')
-        result['instance_id'] = line_dict.get('instance_id')
-        result['dialog_no'] = line_dict.get('dialog_no')
-        result['type'] = item_data.get(TYPE)
-        result['dialog_type'] = item_data.get(DIALOG_TYPE)
-        result['test_or_not'] = ""
+        result[ID] = line_dict.get(ID)
+        result[DIALOG_ID] = line_dict.get(DIALOG_ID)
+        result[INSTANCE_ID] = line_dict.get(INSTANCE_ID)
+        result[DIALOG_NO] = line_dict.get(DIALOG_NO)
+        result[TYPE] = item_data.get(TYPE)
+        result[DIALOG_TYPE] = item_data.get(DIALOG_TYPE)
+        result[TEST_OR_NOT] = ""
+        # 确认分支选项用的 填入的是int
+        result[BRANCH_TREE] = ""
         return result
 
     def dict_datas_to_string(self, action_line: list) -> dict:

@@ -1,0 +1,4 @@
+[37m2022-05-07 10:03:21	INFO	[ConnectAdb]	Connect to android://127.0.0.1:5037/0fc2b2400502[0m
+[37m2022-05-07 10:03:25	INFO	[phone_wake]	wake phone[0m
+[37m2022-05-07 10:03:26	INFO	[stop_game]	stop game com.stardust.spotlight[0m
+[37m2022-05-07 10:03:27	INFO	[start_game]	start game com.stardust.spotlight[0m

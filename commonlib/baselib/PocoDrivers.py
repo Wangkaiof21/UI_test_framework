@@ -184,6 +184,19 @@ def poco_play_dialog_dialog(poco):
     poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
 
 
+def poco_option_list(poco, index_: int):
+    """
+
+    :param poco:
+    :param index_:
+    :return:
+    """
+    # poco("dialog",type="Node").child("Story_Option(Clone)")[0].click()
+    poco_child_find(poco, target_name="dialog", target_child="Story_Option(Clone)", module_type="Node",
+                    list_num=index_ - 1)
+    pass
+
+
 def poco_child_find(poco, target_name: str, target_child: str, module_type: str, wait_time=1, list_num=None) -> bool:
     """
     :param poco: poco对象
