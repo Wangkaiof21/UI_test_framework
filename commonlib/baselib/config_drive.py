@@ -36,7 +36,7 @@ from commonlib.baselib.ConnectAdb import AdbConnect
 from poco.drivers.unity3d import UnityPoco
 from airtest.core.api import G, sleep, text, touch
 import os
-import numpy
+import numpy as np
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 TEST_OR_NOT = 'test_or_not'
@@ -237,6 +237,8 @@ class DeviceRun:
             # 可执行动作的list 多个行动对多个行动不好处理
             func_names = type_str.split(",")[:-1]
             result_index = self.union_data(func_names, ConfigView.EXECUTABLE_LIST)
+            # result_index = numpy.intersect1d(func_names, ConfigView.EXECUTABLE_LIST, assume_unique=False,
+            #                                  return_indices=False)
             if len(result_index) > 0 and dialog_type_str:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Func start -> poco_{result_index[0]}_{dialog_type_str}")

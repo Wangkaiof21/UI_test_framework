@@ -26,14 +26,13 @@ DIALOG_TYPE = "dialog_type"
 CONTENT = "content"
 ITEM_LIST = 'item_list'
 
-
 TEST_OR_NOT = 'test_or_not'
 ID = 'id'
 DIALOG_ID = 'dialog_id'
 INSTANCE_ID = 'instance_id'
 DIALOG_NO = 'dialog_no'
 BRANCH_TREE = 'branch_tree'
-
+WAIT_TIME = "time_scale"
 
 DID = "zpf0001"
 
@@ -281,7 +280,14 @@ class InitExcelData:
         action_result = self.wash_action_datas(save_path, action_dict, lua_action_dict, )
         return action_result
 
-    def wash_action_datas(self, file_path_, txt_, lua_):
+    def wash_action_datas(self, file_path_, txt_, lua_) -> list:
+        """
+
+        :param file_path_:
+        :param txt_:
+        :param lua_:
+        :return:
+        """
         try:
             book_ = list()
             for file_path, dir_list, files in os.walk(file_path_):
@@ -333,9 +339,10 @@ class InitExcelData:
             # 这里要做双重转换 step 1 根据lua文件转换
             result_dict[DIALOG_TYPE] = self.matching_dictionary_to_language(
                 str(line.get(CONTENT).get(DIALOG_TYPE, "")), lua_file_data)
-
             # 这里要做双重转换 step 2 根据action_list.txt文件转换
             result_dict[TYPE] = self.matching_dictionary_to_language(str(line.get(TYPE)), txt_file_data)
+            # 这里要做数值转换 step 3 把里面的时间全部get出来 1000等于1秒 500等于0.5秒 组成一个字段 方便后面的方法调用等待
+            result_dict[WAIT_TIME] = line[CONTENT].get(WAIT_TIME, "")
             result_list_.append(result_dict)
         # 这里需要做一个数据转换成文字 且拼接 多个字典
         # [{'dialog_type': 'voiceover', 'type': 'play_dialog'}, {'dialog_type': '', 'type': 'object_scene_move'}...]转换成
@@ -344,37 +351,56 @@ class InitExcelData:
         return result_list_
 
     def init_new_line(self, line_dict: dict, item_data: dict) -> dict:
-        """根据传入值新建新的字典"""
+        """
+        根据传入值新建新的字典
+        :param line_dict: 原始条目数据
+        :param item_data: 处理过的条目数据
+        :return:
+        """
         result = dict()
         result[ID] = line_dict.get(ID)
         result[DIALOG_ID] = line_dict.get(DIALOG_ID)
         result[INSTANCE_ID] = line_dict.get(INSTANCE_ID)
+        # 页数
         result[DIALOG_NO] = line_dict.get(DIALOG_NO)
+
+        # action大致类型
         result[TYPE] = item_data.get(TYPE)
+        # action行动准确类型
         result[DIALOG_TYPE] = item_data.get(DIALOG_TYPE)
+        # 确实是否测试条目的标记
         result[TEST_OR_NOT] = ""
+        # 等待时间 1000=1s
+        result[WAIT_TIME] = item_data.get(WAIT_TIME)
         # 确认分支选项用的 填入的是int
         result[BRANCH_TREE] = ""
         return result
 
     def dict_datas_to_string(self, action_line: list) -> dict:
         """
-
-        :param action_line:
+        :param action_line:一条条目的多组数据
         :return:
         """
         ty = ""
         dty = ""
+        wtm = 0
         new_action_line = dict()
         for line in action_line:
             if not line.get(TYPE):
-                continue
-            ty += line.get(TYPE) + ","
+                ty = ty
+            else:
+                ty += line.get(TYPE) + ","
+            if not line.get(WAIT_TIME):
+                dty = dty
+            else:
+                wtm += line.get(WAIT_TIME)
             if not line.get(DIALOG_TYPE):
-                continue
-            dty += line.get(DIALOG_TYPE) + ","
+                wtm = wtm
+            else:
+                dty += line.get(DIALOG_TYPE) + ","
         new_action_line[TYPE] = ty
         new_action_line[DIALOG_TYPE] = dty
+        new_action_line[WAIT_TIME] = wtm / 1000
         return new_action_line
 
     def matching_dictionary_to_language(self, value: str, action_dict: dict):
