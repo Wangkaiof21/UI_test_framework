@@ -144,8 +144,17 @@ def poco_play_dialog(poco):
 
 
 def poco_select_skin(poco):
-    # 捏脸
-    poco_try_find_click(poco, target_name="OnPass", module_type="Node")
+    """
+    捏脸 这边有两种情况 一是刚进来的时候 选择一次然后确认捏不捏脸，第二种情况是直接跳转捏脸界面
+    :param poco:
+    :return:
+    """
+    check_index_ = poco_find(poco, target_name="OnPass", module_type="Node")
+    if check_index_:
+        poco_try_find_click(poco, target_name="OnPass", module_type="Node")
+    elif not check_index_:
+        # poco("Confirm", type="Button").click()
+        poco_try_find_click(poco, target_name="Confirm", module_type="Button")
     sleep(2)
 
 
@@ -182,6 +191,19 @@ def poco_play_dialog_think(poco):
 def poco_play_dialog_dialog(poco):
     # poco("Story_Option(Clone)",type="Node")[0].click()
     poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
+
+
+def poco_option_list(poco, index_: int):
+    """
+
+    :param poco:
+    :param index_:
+    :return:
+    """
+    # poco("dialog",type="Node").child("Story_Option(Clone)")[0].click()
+    poco_child_find(poco, target_name="dialog", target_child="Story_Option(Clone)", module_type="Node",
+                    list_num=index_ - 1)
+    pass
 
 
 def poco_child_find(poco, target_name: str, target_child: str, module_type: str, wait_time=1, list_num=None) -> bool:

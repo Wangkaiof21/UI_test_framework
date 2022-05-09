@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2022/4/25 15:13
+# @Time    : 2022/5/6 10:41
 # @Author  : WangKai
 # @Site    : 
-# @File    : test_file_run.py
+# @File    : config_drive.py
 # @Software: PyCharm
-
 """
+需求：
 读取excel内容 获取到 {新增excel 读取信息模块}
 1。需要获取书名 章节名 初始化进入章节检测到内容 则为成功
 
@@ -18,31 +18,31 @@
 匹配book章节key 精准找到目标书本的章节{需要一个可靠的搜索方法，}
 生成阅读每一页的 行动列表->list
 循环每一页的行动列表 实例化相对应的方法 从而实现自动化
+5.1348
 """
 
 from commonlib.baselib.excel import Excel
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_DEBUG, LOG_WARN, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 from commonlib.baselib.ControlAdb import phone_wake, start_game, stop_game
-
+from commonlib.baselib.Config import ConfigView
 from commonlib.baselib.PocoDrivers import poco_try_find_click, poco_try_offspring_click, poco_find, \
     poco_play_dialog_rename, \
     poco_play_dialog, poco_select_skin, poco_cosplay_cossuit, poco_play_dialog_monologue, poco_play_dialog_voiceover, \
     poco_play_dialog_dialog_noshow, \
-    poco_play_dialog, poco_play_dialog_think, poco_play_dialog_dialog
+    poco_play_dialog, poco_play_dialog_think, poco_play_dialog_dialog, poco_option_list
 
 from commonlib.baselib.ConnectAdb import AdbConnect
 from poco.drivers.unity3d import UnityPoco
 from airtest.core.api import G, sleep, text, touch
 import os
+import numpy as np
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
-EXCEL_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../excel_package"))
-LOG_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../logs"))
 TEST_OR_NOT = 'test_or_not'
 TYPE = "type"
 DIALOG_TYPE = "dialog_type"
-EXECUTABLE_LIST = ["select_skin", "play_dialog", "cosplay_cossuit"]
+BRANCH_TREE = 'branch_tree'
 
 MsgCenter(MODULE_NAME)
 
@@ -51,19 +51,21 @@ MsgCenter(MODULE_NAME)
 
 class DeviceRun:
     """
-    这里写的很烂
+    这里写的不好
+    test_mode模式是测试用 只读取excel数据不进行手机的初始化
+    test_mode模式为True则 初始化机器 唤醒 和打开app 把app的sdk poco实例化给self.poco
     """
 
-    def __init__(self, adb=AdbConnect(), app_name="com.stardust.spotlight", ip="127.0.0.1:5037",
-                 local_host="local_host", port=5001, log_fp=LOG_FILES_PATH, test_mode=False):
+    def __init__(self, app_name="com.stardust.spotlight", ip="127.0.0.1:5037",
+                 local_host="local_host", port=5001, log_fp=None, test_mode=False, excel_path=None):
         self.test_mode = test_mode
 
         if not self.test_mode:
             try:
                 # adb模块实例化
-                self.adb = adb
+                self.adb = AdbConnect()
                 # 获取 device 设备号
-                self.device = adb.get_dev_name()
+                self.device = self.adb.get_dev_name()
                 self.log = log_fp
                 self.app_name = app_name
                 # 链接adb
@@ -75,12 +77,12 @@ class DeviceRun:
                 sleep(14)
                 # 实例化poco 给下面的函数调
                 self.poco = UnityPoco((local_host, port))
-                self.excel_path = EXCEL_FILES_PATH
+                self.excel_path = excel_path
             except Exception as e:
                 LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
         else:
             try:
-                self.excel_path = EXCEL_FILES_PATH
+                self.excel_path = ConfigView.EXCEL_FILES_PATH
             except Exception as e:
                 LogMessage(module=MODULE_NAME, level=LOG_ERROR, msg=f"Init phone error => {e}")
 
@@ -88,14 +90,12 @@ class DeviceRun:
         """
         获取书名，和书本章节
         这里应该为未来多本书籍做准备 测试阶段只支持一本书籍
-
         :return: 返回{书籍名:[章节名1，章节名2，章节名3.......],书籍名:[章节名1，章节名2，章节名3.......]}
         """
         book_abs_path = ""
         for file_path, dir_list, files in os.walk(self.excel_path):
             for file_name in files:
                 if file_name.endswith(".xlsx"):
-                    # name_ = file_name.split(".")[0]
                     book_abs_path = os.path.join(file_path, file_name)
         book = dict()
         excel = Excel(book_abs_path)
@@ -111,6 +111,9 @@ class DeviceRun:
         """
 
         try:
+            # 母亲节弹窗临时处理 以后全部弹窗做处理
+            poco_try_find_click(self.poco, target_name="close", module_type="Image")
+
             diamond_num = self.poco("top").offspring("Diamond").child("num").attr("TMP_Text")
             power_num = self.poco("top").offspring("Power").child("num").attr("TMP_Text")
             LogMessage(level=LOG_INFO, module=MODULE_NAME,
@@ -136,7 +139,7 @@ class DeviceRun:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Init book error -> {e}")
             return False
 
-    def wash_the_books_action(self, records: dict) -> dict:
+    def wash_the_books_action(self, records: dict):
         """
         清洗excel读出来的数据
         使用初始化方法 进入游戏
@@ -147,13 +150,9 @@ class DeviceRun:
         books_ = dict()
         (book_abs, sheets_list), = records.items()
         book_name = os.path.basename(book_abs).split(".")[0]
-
-        if not self.test_mode:
-            self.search_book(book_name)
-
         excel = Excel(book_abs)
         # 清洗数据 把test_or_not标记为yes的留下 重新组装字典
-        clean_dict = dict()
+        chapter_dict = dict()
         for sheet_ in sheets_list:
             clean_list = list()
             ch_result = excel.records_get(sheet_)
@@ -162,8 +161,8 @@ class DeviceRun:
                 if line[TEST_OR_NOT] != "yes":
                     continue
                 clean_list.append(line)
-            clean_dict[sheet_] = clean_list
-        books_[book_name] = clean_dict
+            chapter_dict[sheet_] = clean_list
+        books_[book_name] = chapter_dict
 
         for book_name, datas in books_.items():
             LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Test book -> {book_name}")
@@ -171,22 +170,39 @@ class DeviceRun:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Chapter_No.{ch_num} -> Test page -> {ch_page_data}")
 
-        return books_
+        return books_, book_name
 
     def select_chapters_first_entry(self, book_datas):
         """
-        这里假设是从第一章节读起 后续要做成只读某几章节
+        解包书本excel数据 选择章节
         :param book_datas:
         :return:
         """
         (book_name, chapters_value), = book_datas.items()
         sleep(1)
-        for key, value in chapters_value.items():
-            if not value:
+        for key, values in chapters_value.items():
+            if not values:
                 continue
             # 章节名的最后一个数字 做选章节的操作 这个其实不够保险
-            ch_index = int(key[-1]) - 1
-            print("ch_____________________", ch_index)
+            self.click_chapter(ch_index=key)
+            # 章节的条目数据 就是每一步的行动数据 对这个精细操作
+            try:
+                for entry in values:
+                    # 解析 条目数据
+                    self.confirm_executable_method(entry.get(TYPE), entry[DIALOG_TYPE], entry[BRANCH_TREE])
+            except Exception as e:
+                LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Read entry error -> {e}! ")
+            break
+
+    def click_chapter(self, ch_index, ch_read_model=None) -> None:
+        """
+        这里假设是从第一章节读起 后续要做成只读某几章节
+        :param ch_index:
+        :param ch_read_model: 区间章节阅读标记
+        :return:
+        """
+        try:
+            ch_index = int(ch_index[-1]) - 1
             if ch_index == 0:
                 poco_try_find_click(self.poco, target_name="Search", module_type="Node", list_num=ch_index)
                 poco_try_find_click(self.poco, target_name="Play", module_type="Node")
@@ -194,50 +210,8 @@ class DeviceRun:
             else:
                 poco_try_find_click(self.poco, target_name="Play", module_type="Node")
                 sleep(7)
-            # 章节的条目数据 就是每一步的行动数据 对这个精细操作
-            entry_data = value
-            self.read_chapters(entry_data)
-            break
-
-    def read_chapters(self, entry_data):
-        """
-        不需要处理状况 根据条目的内容 实例化方法
-        :param entry_data:
-        :return:
-        """
-        try:
-            index = 1
-            for line in entry_data:
-                self.confirm_executable_method(line[TYPE], line[DIALOG_TYPE], index)
-                # 先解析两个type里面有什么东西
-                # 这里直接转换成方法试试？
-                index += 1
         except Exception as e:
-            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Read entry error -> {e}! ")
-
-    def confirm_executable_method(self, type_str: str, dialog_type_str: str, index_):
-        """
-        切割字符串 获取list
-        :param type_str:
-        :param dialog_type_str:
-        :param index_:条目数量
-        :return:
-        """
-        try:
-            dialog_type_str = self.gen_str(dialog_type_str)
-            # 可执行动作的list 多个行动对多个行动不好处理
-            func_names = type_str.split(",")[:-1]
-            for func_name in func_names:
-                if EXECUTABLE_LIST.count(func_name) > 0 and dialog_type_str:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"{index_} Func start -> poco_{func_name}_{dialog_type_str}")
-                    globals()[f"poco_{func_name}_{dialog_type_str}"](self.poco)
-                elif EXECUTABLE_LIST.count(func_name) > 0 and not dialog_type_str:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"{index_} Func start -> poco_{func_name}")
-                    globals()[f"poco_{func_name}"](self.poco)
-        except Exception as e:
-            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Func error -> {e}")
+            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Chapter.{ch_index} Not find Play button -> {e}")
 
     def gen_str(self, d_type_str):
         if not d_type_str:
@@ -245,10 +219,66 @@ class DeviceRun:
         else:
             return d_type_str.split(",")[0]
 
+    def confirm_executable_method(self, type_str: str, dialog_type_str: str, branch_tree: str):
+        """
+        切割字符串 获取list 取action的交集
+        import numpy
+        array1 = ["play_dialog","play_sound","animation_role","phone","animation_role",]
+        array2 = ["select_skin", "play_dialog", "cosplay_cossuit", "option_list"]
+        c = numpy.intersect1d(array1, array2, assume_unique=False, return_indices=False)
+        print(c)
+        :param type_str:
+        :param dialog_type_str:
+        :param branch_tree:条目数量
+        :return:
+        """
+        try:
+            dialog_type_str = self.gen_str(dialog_type_str)
+            # 可执行动作的list 多个行动对多个行动不好处理
+            func_names = type_str.split(",")[:-1]
+            result_index = self.union_data(func_names, ConfigView.EXECUTABLE_LIST)
+            # result_index = numpy.intersect1d(func_names, ConfigView.EXECUTABLE_LIST, assume_unique=False,
+            #                                  return_indices=False)
+            if len(result_index) > 0 and dialog_type_str:
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Func start -> poco_{result_index[0]}_{dialog_type_str}")
+                globals()[f"poco_{result_index[0]}_{dialog_type_str}"](self.poco)
+            elif len(result_index) > 0 and not dialog_type_str and not branch_tree:
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Func start -> poco_{result_index[0]}")
+                globals()[f"poco_{result_index[0]}"](self.poco)
+            elif len(result_index) > 0 and not dialog_type_str and branch_tree:
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Func start -> poco_{result_index[0]} -> branch {int(branch_tree)}")
+                globals()[f"poco_{result_index[0]}"](self.poco, int(branch_tree))
+
+        except Exception as e:
+            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Func error -> {e}")
+
+    def union_data(self, arry1, arry2):
+        """
+
+        :param arry1:
+        :param arry2:
+        :return:
+        """
+        if len(set(arry1) & set(arry2)) == 0:
+            return []
+        elif len(set(arry1) & set(arry2)) >= 1:
+            return list(set(arry1) & set(arry2))
+
 
 if __name__ == '__main__':
-    test = DeviceRun()
-    # test = DeviceRun(test_mode=True)
-    res = test.initial_data()
-    res_dict = test.wash_the_books_action(res)
-    test.select_chapters_first_entry(res_dict)
+    TEST_RANK = True
+    if TEST_RANK:
+        test = DeviceRun(excel_path=ConfigView.EXCEL_FILES_PATH, log_fp=ConfigView.LOG_FILES_PATH)
+        res = test.initial_data()
+        res_dict, book_name_ = test.wash_the_books_action(res)
+        test.search_book(book_name=book_name_)
+        test.select_chapters_first_entry(res_dict)
+    else:
+        test = DeviceRun(test_mode=True, excel_path=ConfigView.EXCEL_FILES_PATH, log_fp=ConfigView.LOG_FILES_PATH)
+        res = test.initial_data()
+        res_dict, book_name_ = test.wash_the_books_action(res)
+        # test.search_book(book_name=book_name_)
+        test.select_chapters_first_entry(res_dict)
