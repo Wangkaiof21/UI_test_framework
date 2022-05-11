@@ -43,6 +43,7 @@ TEST_OR_NOT = 'test_or_not'
 TYPE = "type"
 DIALOG_TYPE = "dialog_type"
 BRANCH_TREE = 'branch_tree'
+WAIT_TIME = "time_scale"
 
 MsgCenter(MODULE_NAME)
 
@@ -189,7 +190,9 @@ class DeviceRun:
             try:
                 for entry in values:
                     # 解析 条目数据
-                    self.confirm_executable_method(entry.get(TYPE), entry[DIALOG_TYPE], entry[BRANCH_TREE])
+                    self.confirm_executable_method(entry.get(TYPE), entry[DIALOG_TYPE], entry[BRANCH_TREE],
+                                                   entry[WAIT_TIME])
+
             except Exception as e:
                 LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Read entry error -> {e}! ")
             break
@@ -219,7 +222,7 @@ class DeviceRun:
         else:
             return d_type_str.split(",")[0]
 
-    def confirm_executable_method(self, type_str: str, dialog_type_str: str, branch_tree: str):
+    def confirm_executable_method(self, type_str: str, dialog_type_str: str, branch_tree: str, wait_time_: str):
         """
         切割字符串 获取list 取action的交集
         import numpy
@@ -230,6 +233,7 @@ class DeviceRun:
         :param type_str:
         :param dialog_type_str:
         :param branch_tree:条目数量
+        :param wait_time_:镜头运动时间 画外音可能要取消
         :return:
         """
         try:
@@ -239,18 +243,31 @@ class DeviceRun:
             result_index = self.union_data(func_names, ConfigView.EXECUTABLE_LIST)
             # result_index = numpy.intersect1d(func_names, ConfigView.EXECUTABLE_LIST, assume_unique=False,
             #                                  return_indices=False)
-            if len(result_index) > 0 and dialog_type_str:
-                LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Func start -> poco_{result_index[0]}_{dialog_type_str}")
-                globals()[f"poco_{result_index[0]}_{dialog_type_str}"](self.poco)
-            elif len(result_index) > 0 and not dialog_type_str and not branch_tree:
-                LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Func start -> poco_{result_index[0]}")
-                globals()[f"poco_{result_index[0]}"](self.poco)
-            elif len(result_index) > 0 and not dialog_type_str and branch_tree:
-                LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Func start -> poco_{result_index[0]} -> branch {int(branch_tree)}")
-                globals()[f"poco_{result_index[0]}"](self.poco, int(branch_tree))
+            run_time = 0
+            while run_time < 5:
+                if len(result_index) > 0 and dialog_type_str:
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                               msg=f"Func start poco_{result_index[0]}_{dialog_type_str} time_out -> {wait_time_} second")
+                    globals()[f"poco_{result_index[0]}_{dialog_type_str}"](self.poco, wait_time_)
+                    if globals()[f"poco_{result_index[0]}_{dialog_type_str}"](self.poco, wait_time_):
+                        LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                                   msg=f"poco_{result_index[0]}_{dialog_type_str} run success")
+                        break
+
+                elif len(result_index) > 0 and not dialog_type_str and not branch_tree:
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                               msg=f"Func start poco_{result_index[0]} time_out -> {wait_time_} second")
+                    if globals()[f"poco_{result_index[0]}"](self.poco, wait_time_):
+                        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{result_index[0]} run success")
+                        break
+
+                elif len(result_index) > 0 and not dialog_type_str and branch_tree:
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                               msg=f"Func start poco_{result_index[0]} -> branch {int(branch_tree)} time_out -> {wait_time_} second")
+                    if globals()[f"poco_{result_index[0]}"](self.poco, int(branch_tree), wait_time_):
+                        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{result_index[0]} run success")
+                        break
+                run_time += 1
 
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Func error -> {e}")

@@ -132,9 +132,18 @@ def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring
         return False
 
 
-def poco_play_dialog_rename(poco):
-    # 重命名
-    poco_try_find_click(poco, target_name="Confirm", module_type="Image")
+# 行动封装
+def poco_play_dialog_rename(poco, wait_time=0.5):
+    """
+    行动 -> 重命名
+    :param poco:
+    :param wait_time:
+    :return:
+    """
+
+    poco_result = poco_try_find_click(poco, target_name="Confirm", module_type="Image")
+    sleep(wait_time)
+    return poco_result
 
 
 def poco_play_dialog(poco):
@@ -143,66 +152,110 @@ def poco_play_dialog(poco):
     sleep(1)
 
 
-def poco_select_skin(poco):
+def poco_select_skin(poco, wait_time=0.5) -> bool:
     """
-    捏脸 这边有两种情况 一是刚进来的时候 选择一次然后确认捏不捏脸，第二种情况是直接跳转捏脸界面
+    行动 -> 捏脸 这边有两种情况 一是刚进来的时候 选择一次然后确认捏不捏脸，第二种情况是直接跳转捏脸界面
     :param poco:
+    :param wait_time:
     :return:
     """
     check_index_ = poco_find(poco, target_name="OnPass", module_type="Node")
     if check_index_:
-        poco_try_find_click(poco, target_name="OnPass", module_type="Node")
+        poco_result = poco_try_find_click(poco, target_name="OnPass", module_type="Node")
+        sleep(wait_time)
+        return poco_result
     elif not check_index_:
         # poco("Confirm", type="Button").click()
-        poco_try_find_click(poco, target_name="Confirm", module_type="Button")
-    sleep(2)
+        poco_result = poco_try_find_click(poco, target_name="Confirm", module_type="Button")
+        sleep(wait_time)
+        return poco_result
 
 
-def poco_play_dialog_monologue(poco):
+def poco_play_dialog_monologue(poco, wait_time=0.5):
+    """
+    行动 -> 内心独白
+    :param poco:
+    :param wait_time:超时时间
+    :return:
+    """
     # 内心独白
     # poco_try_find_offspring(poco, target_name="ViewCanvas", module_type="Node", offspring_name="Dialog_Monologue_")
-    poco_try_find_click(poco, target_name="Dialog_Monologue", module_type="Node")
+    poco_result = poco_try_find_click(poco, target_name="Dialog_Monologue", module_type="Node")
     # poco_try_find_click(poco, target_name="Dialog_Monologue_", module_type="Image")
-    sleep(0.5)
+    sleep(wait_time)
+    return poco_result
 
 
-def poco_cosplay_cossuit(poco):
-    # 换装
-    poco_try_find_click(poco, target_name="confirm", module_type="Image")
-    sleep(4)
+def poco_cosplay_cossuit(poco, wait_time=4):
+    """
+    行动 -> 换装
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
+    poco_result = poco_try_find_click(poco, target_name="confirm", module_type="Image")
+    sleep(wait_time)
+    return poco_result
 
 
-def poco_play_dialog_voiceover(poco):
-    # 画外音
+def poco_play_dialog_voiceover(poco, wait_time=1):
+    """
+    行动 -> 画外音
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
     poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
-    sleep(1)
+    sleep(wait_time)
 
 
-def poco_play_dialog_dialog_noshow(poco):
-    # 不展示
+def poco_play_dialog_dialog_noshow(poco, wait_time=1):
+    """
+    行动 -> 换装
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
+    sleep(wait_time + 0.5)
     # poco_try_find_click(poco, target_name="OnPass", module_type="Node")
     pass
 
 
-def poco_play_dialog_think(poco):
+def poco_play_dialog_think(poco, wait_time=0.5):
+    """
+    行动 -> 思考
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
     poco_try_find_click(poco, target_name="Dialog_Left", module_type="Node")
+    sleep(wait_time)
 
 
-def poco_play_dialog_dialog(poco):
+def poco_play_dialog_dialog(poco, wait_time=0.5):
+    """
+    行动 -> 一般对话
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
     # poco("Story_Option(Clone)",type="Node")[0].click()
     poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
+    sleep(wait_time)
 
 
-def poco_option_list(poco, index_: int):
+def poco_option_list(poco, index_: int, wait_time=0.5):
     """
-
+    行动 -> 选项框
     :param poco:
-    :param index_:
+    :param index_: 超时时间
+    :param wait_time: 超时时间
     :return:
     """
     # poco("dialog",type="Node").child("Story_Option(Clone)")[0].click()
     poco_child_find(poco, target_name="dialog", target_child="Story_Option(Clone)", module_type="Node",
                     list_num=index_ - 1)
+    sleep(wait_time)
     pass
 
 
