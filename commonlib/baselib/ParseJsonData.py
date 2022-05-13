@@ -45,7 +45,7 @@ class InitExcelData:
 
     def ini_common_header(self) -> dict:
         """
-        自動化生成新的dict
+        自動化生成新的请求头
         :return:
         """
         result = dict()
@@ -89,7 +89,7 @@ class InitExcelData:
 
     def get_test_url(self) -> str:
         """
-
+        返回需要测试的服务地址
         :return:
         """
         if self.debug:
@@ -166,7 +166,7 @@ class InitExcelData:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Get book ids error => {e}")
         return chapter_ids, book_name
 
-    def get_book_chapter_id_result(self, token, story_chapter_ids: list, secret="56a354ec", change_id=None):
+    def get_book_chapter_id_result(self, token, story_chapter_ids: list, secret="56a354ec", change_id=None) -> list:
 
         """
         666010190001
@@ -213,7 +213,8 @@ class InitExcelData:
             time.sleep(SLEEP_TIME)
         return zip_path_list
 
-    def parse_action_list_to_json(self, result_data: list, save_path, action_dict, lua_action_dict, chunk_size=128):
+    def parse_action_list_to_json(self, result_data: list, save_path: str, action_dict: dict, lua_action_dict: dict,
+                                  chunk_size=128) -> list:
         """
         解析返回的资源数据，发起请求获取zip文件 存储在固定文件夹 并解压重命名获取行动数据
         解压之后 读取txt内容 洗数据
@@ -221,8 +222,8 @@ class InitExcelData:
         :param result_data:
         :param save_path:章节txt保存路径
         :param chunk_size:块大小 怕文件过大 分块写入
-        :param action_dict:
-        :param lua_action_dict:
+        :param action_dict:行动字典
+        :param lua_action_dict:行动细节字典
         :return:
         """
         target_url_a = "http://spt-cdn.stardustgod.com/spt/"
@@ -378,26 +379,36 @@ class InitExcelData:
 
     def dict_datas_to_string(self, action_line: list) -> dict:
         """
-        :param action_line:一条条目的多组数据
+        把list里面的dict数据累加字符串以逗号分隔 数字类型相加/1000 获得秒数 ，因为是浮点数可能需要处理多一次
+        :param action_line: 原始条目数据
         :return:
         """
-        ty = ""
-        dty = ""
-        wtm = 0
+        ty = ""  # type str
+        dty = ""  # dialog_type str
+        wtm = 0  # wait_time int
         new_action_line = dict()
+        # a = [i["dialog_type"] for i in action_line if i["dialog_type"]]
+        # new_action_line["dialog_type"] = ','.join(a)
+        #
+        # a = [i["type"] for i in action_line if i["type"]]
+        # new_action_line["type"] = ','.join(a)
+        #
+        # a = [i["time_scale"] for i in action_line if i["time_scale"]]
+        # new_action_line["time_scale"] = sum(a)
         for line in action_line:
             if not line.get(TYPE):
-                ty = ty
+                ty += ""
             else:
                 ty += line.get(TYPE) + ","
             if not line.get(WAIT_TIME):
-                dty = dty
+                wtm += 0
             else:
                 wtm += line.get(WAIT_TIME)
             if not line.get(DIALOG_TYPE):
-                wtm = wtm
+                dty += ""
             else:
                 dty += line.get(DIALOG_TYPE) + ","
+
         new_action_line[TYPE] = ty
         new_action_line[DIALOG_TYPE] = dty
         new_action_line[WAIT_TIME] = wtm / 1000
@@ -492,7 +503,7 @@ if __name__ == '__main__':
 
     if SWITCH_INDEX:
         BOOK_ID = "10190"
-        DEBUG_ = False
+        DEBUG_ = False  # True代表访问的是测试服的url接口 False则是审核服
         a = InitExcelData(book_id=BOOK_ID, debug=DEBUG_, did=DID)
         token_ = a.get_login_token()
         chapters, book = a.get_book_msg(token=token_)
