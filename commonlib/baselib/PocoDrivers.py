@@ -4,17 +4,17 @@ from poco.exceptions import PocoNoSuchNodeException
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 from airtest.core.api import text, touch
+# from airtest.core.api import G, sleep, text, touch
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 # MsgCenter(MODULE_NAME)
 SLEEP_TIME = 1
 
 
-def poco_find(poco, target_name: str, module_type: str, wait_time=1, list_num=None) -> bool:
+def poco_find(poco, target_name: str, module_type: str,  list_num=None) -> bool:
     """
     :param poco: poco对象
     :param target_name:控件的name属性
-    :param wait_time:等待时间
     :param module_type:控件的type属性
     :param list_num:拥有多个同级的元素 得拿下标取值的
     :return:
@@ -22,12 +22,12 @@ def poco_find(poco, target_name: str, module_type: str, wait_time=1, list_num=No
     try:
         if list_num:
             LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}[{list_num}]....")
-            if poco(target_name, type=module_type)[list_num].wait(wait_time).exists():
+            if poco(target_name, type=module_type)[list_num].exists():
                 LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
                 return True
         else:
             LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
-            if poco(target_name, type=module_type).wait(wait_time).exists():
+            if poco(target_name, type=module_type).exists():
                 LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
                 return True
     except Exception as e:
@@ -89,19 +89,18 @@ def poco_send_text(poco, input_field: str, module_type: str, text_: str) -> bool
             return False
 
 
-def poco_try_find_offspring(poco, target_name: str, module_type: str, offspring_name: str, wait_time=1, ):
+def poco_try_find_offspring(poco, target_name: str, module_type: str, offspring_name: str,):
     """
     父级关联查找
     :param poco: poco对象
     :param target_name: 控件的name属性
     :param module_type: 控件的type属性
     :param offspring_name: 父级控件的关联字段
-    :param wait_time: 等待时间
     :return:
     """
     try:
         LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
-        poco(target_name=target_name, type=module_type).offspring(offspring_name).wait(wait_time).exists()
+        poco(target_name=target_name, type=module_type).offspring(offspring_name).exists()
         LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
         sleep(SLEEP_TIME)
         return True
@@ -111,7 +110,7 @@ def poco_try_find_offspring(poco, target_name: str, module_type: str, offspring_
         return False
 
 
-def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring_name: str, wait_time=1) -> bool:
+def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring_name: str, wait_time=0.1) -> bool:
     """
     尝试寻找和点击 后面要加个功能 => 尝试等待返回结果
     :param poco: poco对象
@@ -133,14 +132,13 @@ def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring
 
 
 # 行动封装
-def poco_play_dialog_rename(poco, wait_time=0.5):
+def poco_play_dialog_rename(poco, wait_time=0.1) -> bool:
     """
     行动 -> 重命名
     :param poco:
     :param wait_time:
     :return:
     """
-
     poco_result = poco_try_find_click(poco, target_name="Confirm", module_type="Image")
     sleep(wait_time)
     return poco_result
@@ -152,7 +150,7 @@ def poco_play_dialog(poco):
     sleep(1)
 
 
-def poco_select_skin(poco, wait_time=0.5) -> bool:
+def poco_select_skin(poco, wait_time=2) -> bool:
     """
     行动 -> 捏脸 这边有两种情况 一是刚进来的时候 选择一次然后确认捏不捏脸，第二种情况是直接跳转捏脸界面
     :param poco:
@@ -171,7 +169,7 @@ def poco_select_skin(poco, wait_time=0.5) -> bool:
         return poco_result
 
 
-def poco_play_dialog_monologue(poco, wait_time=0.5):
+def poco_play_dialog_monologue(poco, wait_time=0.1) -> bool:
     """
     行动 -> 内心独白
     :param poco:
@@ -186,53 +184,56 @@ def poco_play_dialog_monologue(poco, wait_time=0.5):
     return poco_result
 
 
-def poco_cosplay_cossuit(poco, wait_time=4):
+def poco_cosplay_cossuit(poco, wait_time=4) -> bool:
     """
     行动 -> 换装
     :param poco:
     :param wait_time: 超时时间
     :return:
     """
-    poco_result = poco_try_find_click(poco, target_name="confirm", module_type="Image")
     sleep(wait_time)
+    poco_result = poco_try_find_click(poco, target_name="confirm", module_type="Image")
     return poco_result
 
 
-def poco_play_dialog_voiceover(poco, wait_time=1):
+def poco_play_dialog_voiceover(poco, wait_time=0.1) -> bool:
     """
     行动 -> 画外音
     :param poco:
     :param wait_time: 超时时间
     :return:
     """
-    poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
+    poco_result = poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
     sleep(wait_time)
+    return poco_result
 
 
-def poco_play_dialog_dialog_noshow(poco, wait_time=1):
+def poco_play_dialog_dialog_noshow(poco, wait_time=0.1) -> bool:
     """
     行动 -> 换装
     :param poco:
     :param wait_time: 超时时间
     :return:
     """
-    sleep(wait_time + 0.5)
+    # sleep(wait_time + 1.5)
+    sleep(wait_time)
     # poco_try_find_click(poco, target_name="OnPass", module_type="Node")
-    pass
+    return True
 
 
-def poco_play_dialog_think(poco, wait_time=0.5):
+def poco_play_dialog_think(poco, wait_time=0.1) -> bool:
     """
     行动 -> 思考
     :param poco:
     :param wait_time: 超时时间
     :return:
     """
-    poco_try_find_click(poco, target_name="Dialog_Left", module_type="Node")
+    poco_result = poco_try_find_click(poco, target_name="Dialog_Left", module_type="Node")
     sleep(wait_time)
+    return poco_result
 
 
-def poco_play_dialog_dialog(poco, wait_time=0.5):
+def poco_play_dialog_dialog(poco, wait_time=0.1) -> bool:
     """
     行动 -> 一般对话
     :param poco:
@@ -240,11 +241,12 @@ def poco_play_dialog_dialog(poco, wait_time=0.5):
     :return:
     """
     # poco("Story_Option(Clone)",type="Node")[0].click()
-    poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
+    poco_result = poco_child_find(poco, target_name="ViewCanvas", target_child="View", module_type="Node")
     sleep(wait_time)
+    return poco_result
 
 
-def poco_option_list(poco, index_: int, wait_time=0.5):
+def poco_option_list(poco, index_: int, wait_time=0.5) -> bool:
     """
     行动 -> 选项框
     :param poco:
@@ -253,13 +255,35 @@ def poco_option_list(poco, index_: int, wait_time=0.5):
     :return:
     """
     # poco("dialog",type="Node").child("Story_Option(Clone)")[0].click()
-    poco_child_find(poco, target_name="dialog", target_child="Story_Option(Clone)", module_type="Node",
-                    list_num=index_ - 1)
+    poco_result = poco_child_find(poco, target_name="dialog", target_child="Story_Option(Clone)", module_type="Node",
+                                  list_num=index_ - 1)
     sleep(wait_time)
-    pass
+    return poco_result
 
 
-def poco_child_find(poco, target_name: str, target_child: str, module_type: str, wait_time=1, list_num=None) -> bool:
+def poco_lens_move(poco, wait_time=0.1) -> bool:
+    """
+    行动 -> 角色移动
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
+    sleep(wait_time)
+    return True
+
+
+def poco_lens_move_voiceover(poco, wait_time=0.5) -> bool:
+    """
+    行动 -> 角色移动 +画外音类型
+    :param poco:
+    :param wait_time: 超时时间
+    :return:
+    """
+    sleep(wait_time)
+    return True
+
+
+def poco_child_find(poco, target_name: str, target_child: str, module_type: str, wait_time=0.1, list_num=None) -> bool:
     """
     :param poco: poco对象
     :param target_name:控件的name属性

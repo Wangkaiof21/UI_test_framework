@@ -379,7 +379,8 @@ class InitExcelData:
 
     def dict_datas_to_string(self, action_line: list) -> dict:
         """
-        :param action_line:一条条目的多组数据
+        把list里面的dict数据累加字符串以逗号分隔 数字类型相加/1000 获得秒数 ，因为是浮点数可能需要处理多一次
+        :param action_line: 原始条目数据
         :return:
         """
         ty = ""  # type str

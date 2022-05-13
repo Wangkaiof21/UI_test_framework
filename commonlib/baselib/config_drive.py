@@ -30,7 +30,8 @@ from commonlib.baselib.PocoDrivers import poco_try_find_click, poco_try_offsprin
     poco_play_dialog_rename, \
     poco_play_dialog, poco_select_skin, poco_cosplay_cossuit, poco_play_dialog_monologue, poco_play_dialog_voiceover, \
     poco_play_dialog_dialog_noshow, \
-    poco_play_dialog, poco_play_dialog_think, poco_play_dialog_dialog, poco_option_list
+    poco_play_dialog, poco_play_dialog_think, poco_play_dialog_dialog, poco_option_list, poco_lens_move, \
+    poco_lens_move_voiceover
 
 from commonlib.baselib.ConnectAdb import AdbConnect
 from poco.drivers.unity3d import UnityPoco
@@ -44,6 +45,7 @@ TYPE = "type"
 DIALOG_TYPE = "dialog_type"
 BRANCH_TREE = 'branch_tree'
 WAIT_TIME = "time_scale"
+DIALOG_NO = "dialog_no"
 
 MsgCenter(MODULE_NAME)
 
@@ -113,23 +115,23 @@ class DeviceRun:
 
         try:
             # 母亲节弹窗临时处理 以后全部弹窗做处理
-            poco_try_find_click(self.poco, target_name="close", module_type="Image")
+            poco_try_find_click(self.poco.freeze(), target_name="close", module_type="Image")
 
-            diamond_num = self.poco("top").offspring("Diamond").child("num").attr("TMP_Text")
-            power_num = self.poco("top").offspring("Power").child("num").attr("TMP_Text")
-            LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                       msg=f"init the game has Diamond:{diamond_num} Power:{power_num}")
-            poco_try_find_click(self.poco, target_name="Search", module_type="Node")
-            poco_try_offspring_click(self.poco, target_name="ViewCanvasUpper", module_type="Node",
+            # diamond_num = self.poco("top").offspring("Diamond").child("num").attr("TMP_Text")
+            # power_num = self.poco("top").offspring("Power").child("num").attr("TMP_Text")
+            # LogMessage(level=LOG_INFO, module=MODULE_NAME,
+            #            msg=f"init the game has Diamond:{diamond_num} Power:{power_num}")
+            poco_try_find_click(self.poco.freeze(), target_name="Search", module_type="Node")
+            poco_try_offspring_click(self.poco.freeze(), target_name="ViewCanvasUpper", module_type="Node",
                                      offspring_name="InputField")
             text(book_name, enter=False)
-            if poco_find(self.poco, target_name="SearchBook(Clone)", module_type="Node"):
+            if poco_find(self.poco.freeze(), target_name="SearchBook(Clone)", module_type="Node"):
                 # 这里需要空点一下 以退出输入框
                 touch([0.5, 0.5])
-                poco_try_find_click(self.poco, target_name="SearchBook(Clone)", module_type="Node")
+                poco_try_find_click(self.poco.freeze(), target_name="SearchBook(Clone)", module_type="Node")
                 # 重置书籍
-                poco_try_find_click(self.poco, target_name="Reset", module_type="Node")
-                poco_try_find_click(self.poco, target_name="ComfirmBtn", module_type="Button")
+                poco_try_find_click(self.poco.freeze(), target_name="Reset", module_type="Node")
+                poco_try_find_click(self.poco.freeze(), target_name="ComfirmBtn", module_type="Button")
                 return True
             else:
                 # 如果没有搜索到书本则直接关掉游戏 或者等其他处理
@@ -190,8 +192,8 @@ class DeviceRun:
             try:
                 for entry in values:
                     # 解析 条目数据
-                    self.confirm_executable_method(entry.get(TYPE), entry[DIALOG_TYPE], entry[BRANCH_TREE],
-                                                   entry[WAIT_TIME])
+                    self.confirm_executable_method(entry.get(TYPE), entry.get(DIALOG_TYPE), entry.get(BRANCH_TREE),
+                                                   entry.get(WAIT_TIME), entry.get(DIALOG_NO))
 
             except Exception as e:
                 LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Read entry error -> {e}! ")
@@ -207,11 +209,11 @@ class DeviceRun:
         try:
             ch_index = int(ch_index[-1]) - 1
             if ch_index == 0:
-                poco_try_find_click(self.poco, target_name="Search", module_type="Node", list_num=ch_index)
-                poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+                poco_try_find_click(self.poco.freeze(), target_name="Search", module_type="Node", list_num=ch_index)
+                poco_try_find_click(self.poco.freeze(), target_name="Play", module_type="Node")
                 sleep(7)
             else:
-                poco_try_find_click(self.poco, target_name="Play", module_type="Node")
+                poco_try_find_click(self.poco.freeze(), target_name="Play", module_type="Node")
                 sleep(7)
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Chapter.{ch_index} Not find Play button -> {e}")
@@ -222,18 +224,19 @@ class DeviceRun:
         else:
             return d_type_str.split(",")[0]
 
-    def confirm_executable_method(self, type_str: str, dialog_type_str: str, branch_tree: str, wait_time_: str):
+    def confirm_executable_method(self, type_str: str, dialog_type_str: str, branch_tree: str, wait_time_: str,
+                                  dia_log_id: str):
         """
         切割字符串 获取list 取action的交集
         import numpy
         array1 = ["play_dialog","play_sound","animation_role","phone","animation_role",]
         array2 = ["select_skin", "play_dialog", "cosplay_cossuit", "option_list"]
         c = numpy.intersect1d(array1, array2, assume_unique=False, return_indices=False)
-        print(c)
-        :param type_str:
-        :param dialog_type_str:
+        :param type_str:行动类型
+        :param dialog_type_str:行动细分类型
         :param branch_tree:条目数量
         :param wait_time_:镜头运动时间 画外音可能要取消
+        :param dia_log_id: 页数ID
         :return:
         """
         try:
@@ -243,32 +246,23 @@ class DeviceRun:
             result_index = self.union_data(func_names, ConfigView.EXECUTABLE_LIST)
             # result_index = numpy.intersect1d(func_names, ConfigView.EXECUTABLE_LIST, assume_unique=False,
             #                                  return_indices=False)
-            run_time = 0
-            while run_time < 5:
-                if len(result_index) > 0 and dialog_type_str:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"Func start poco_{result_index[0]}_{dialog_type_str} time_out -> {wait_time_} second")
-                    globals()[f"poco_{result_index[0]}_{dialog_type_str}"](self.poco, wait_time_)
-                    if globals()[f"poco_{result_index[0]}_{dialog_type_str}"](self.poco, wait_time_):
-                        LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                                   msg=f"poco_{result_index[0]}_{dialog_type_str} run success")
-                        break
-
-                elif len(result_index) > 0 and not dialog_type_str and not branch_tree:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"Func start poco_{result_index[0]} time_out -> {wait_time_} second")
-                    if globals()[f"poco_{result_index[0]}"](self.poco, wait_time_):
-                        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{result_index[0]} run success")
-                        break
-
-                elif len(result_index) > 0 and not dialog_type_str and branch_tree:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"Func start poco_{result_index[0]} -> branch {int(branch_tree)} time_out -> {wait_time_} second")
-                    if globals()[f"poco_{result_index[0]}"](self.poco, int(branch_tree), wait_time_):
-                        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{result_index[0]} run success")
-                        break
-                run_time += 1
-
+            print(result_index, dialog_type_str)
+            if len(result_index) > 1 and result_index.count('lens_move'):
+                for action in result_index:
+                    if action == 'lens_move':
+                        self.execute_read_action(action_name=action, action_type=dialog_type_str,
+                                                 branch_index=branch_tree, wait_time=0,
+                                                 action_id=dia_log_id)
+                    else:
+                        self.execute_read_action(action_name=action, action_type=dialog_type_str,
+                                                 branch_index=branch_tree, wait_time=wait_time_,
+                                                 action_id=dia_log_id)
+            else:
+                for action in result_index:
+                    self.execute_read_action(action_name=action, action_type=dialog_type_str, branch_index=branch_tree,
+                                             wait_time=wait_time_,
+                                             action_id=dia_log_id)
+            print("\n")
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Func error -> {e}")
 
@@ -283,6 +277,44 @@ class DeviceRun:
             return []
         elif len(set(arry1) & set(arry2)) >= 1:
             return list(set(arry1) & set(arry2))
+
+    def execute_read_action(self, action_name, action_type, branch_index, wait_time, action_id):
+        """
+        上层可以控制这里的输入 ['lens_move', 'play_dialog'] 不能等待两次
+        这里是执行字符串转方法实例化的地方 会返回布尔值 来确定条目过不过
+        :param action_name: 行动名
+        :param action_type: 行动详细
+        :param branch_index: 分枝树
+        :param wait_time: 等待时间
+        :param action_id: 条目id 用来展示用
+        :return:
+        """
+        run_time = 0
+        while run_time < 2:
+            # 加个for循环
+            if action_name and action_type:
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Func start ID: {action_id} poco_{action_name}_{action_type} time_out -> {wait_time} second")
+                if globals()[f"poco_{action_name}_{action_type}"](self.poco.freeze(), wait_time):
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                               msg=f"poco_{action_name}_{action_type} run success")
+                    break
+
+            elif action_name and not action_type and not branch_index:
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Func start ID: {action_id} poco_{action_name} time_out -> {wait_time} second")
+                if globals()[f"poco_{action_name}"](self.poco.freeze(), wait_time):
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{action_name} run success")
+                    break
+
+            elif action_name and not action_type and branch_index:
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Func start ID: {action_id} poco_{action_name} -> branch {int(branch_index)} time_out -> {wait_time} second")
+                if globals()[f"poco_{action_name}"](self.poco.freeze(), int(branch_index), wait_time):
+                    LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{action_name} run success")
+                    break
+            # break
+            run_time += 1
 
 
 if __name__ == '__main__':

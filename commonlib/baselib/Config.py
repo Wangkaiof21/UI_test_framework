@@ -21,6 +21,6 @@ class ConfigView:
         'Accept-Language': 'en',
         'dievel': '_medium'
     }
-    EXECUTABLE_LIST = ["select_skin", "play_dialog", "cosplay_cossuit", "option_list"]
+    EXECUTABLE_LIST = ["select_skin", "play_dialog", "cosplay_cossuit", "option_list", "lens_move"]
     EXCEL_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../../excel_package"))
     LOG_FILES_PATH = os.path.abspath(os.path.join(os.getcwd(), "../../logs"))
