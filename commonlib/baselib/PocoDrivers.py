@@ -4,15 +4,20 @@ from poco.exceptions import PocoNoSuchNodeException
 from commonlib.baselib.log_message import LogMessage, LOG_ERROR, LOG_INFO
 from commonlib.baselib.msg_center import MsgCenter
 from airtest.core.api import text, touch
+
 # from airtest.core.api import G, sleep, text, touch
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
+
+
 # MsgCenter(MODULE_NAME)
-SLEEP_TIME = 1
 
 
-def poco_find(poco, target_name: str, module_type: str,  list_num=None) -> bool:
+# 这里要重新写 把所有等待干掉 因为冻结poco树 只需要在行动前等待足够多的时间，直接点击就完事了
+
+def poco_find(poco, target_name: str, module_type: str, list_num=None) -> bool:
     """
+    直接尝试查找
     :param poco: poco对象
     :param target_name:控件的name属性
     :param module_type:控件的type属性
@@ -20,15 +25,11 @@ def poco_find(poco, target_name: str, module_type: str,  list_num=None) -> bool:
     :return:
     """
     try:
-        if list_num:
-            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}[{list_num}]....")
-            if poco(target_name, type=module_type)[list_num].exists():
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
+        if not list_num:
+            if poco(target_name, type=module_type).exists():
                 return True
         else:
-            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
-            if poco(target_name, type=module_type).exists():
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
+            if poco(target_name, type=module_type)[list_num].exists():
                 return True
     except Exception as e:
         LogMessage(level=LOG_ERROR, module=MODULE_NAME,
@@ -38,33 +39,29 @@ def poco_find(poco, target_name: str, module_type: str,  list_num=None) -> bool:
 
 def poco_try_find_click(poco, target_name: str, module_type: str, list_num=None) -> bool:
     """
-    尝试寻找和点击 后面要加个功能 => 尝试等待返回结果
+    直接尝试查找和点击 后面要加个功能 => 尝试等待返回结果
     :param poco: poco对象
     :param target_name:控件的name属性
     :param module_type:控件的type属性
     :param list_num:拥有多个同级的元素 得拿下标取值的
     :return:
     """
-    if list_num:
-        try:
-            if poco_find(poco=poco, target_name=target_name, module_type=module_type, list_num=list_num):
-                poco(target_name, type=module_type)[list_num].click()
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} success!")
-                sleep(SLEEP_TIME)
-                return True
-        except Exception as e:
-            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail! {e}")
-            return False
-    else:
-        try:
-            if poco_find(poco=poco, target_name=target_name, module_type=module_type):
+    try:
+        if not list_num:
+            if poco(target_name, type=module_type).exists():
                 poco(target_name, type=module_type).click()
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} success!")
-                sleep(SLEEP_TIME)
+                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} {module_type} success!")
                 return True
-        except Exception as e:
-            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail! {e}")
-            return False
+        elif list_num:
+            if poco(target_name, type=module_type)[list_num].exists():
+                poco(target_name, type=module_type)[list_num].click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Click {target_name} {module_type}  Number:{list_num} success!")
+                return True
+    except Exception as e:
+        LogMessage(level=LOG_ERROR, module=MODULE_NAME,
+                   msg=f"Click {target_name} {module_type}  Number:{list_num} fail! {e}")
+        return False
 
 
 def poco_send_text(poco, input_field: str, module_type: str, text_: str) -> bool:
@@ -78,56 +75,98 @@ def poco_send_text(poco, input_field: str, module_type: str, text_: str) -> bool
     :return:
     """
     time = 2
-    while time > 0:
-        time -= 1
-        try:
+    try:
+        while time > 0:
+            time -= 1
             if poco_find(poco=poco, target_name=input_field, module_type=module_type):
                 poco(input_field, type=module_type).set_text(str(text_))
                 return True
-        except Exception as e:
-            LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Send text {text_} fail! -> {e}")
-            return False
-
-
-def poco_try_find_offspring(poco, target_name: str, module_type: str, offspring_name: str,):
-    """
-    父级关联查找
-    :param poco: poco对象
-    :param target_name: 控件的name属性
-    :param module_type: 控件的type属性
-    :param offspring_name: 父级控件的关联字段
-    :return:
-    """
-    try:
-        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
-        poco(target_name=target_name, type=module_type).offspring(offspring_name).exists()
-        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Find {target_name} !")
-        sleep(SLEEP_TIME)
-        return True
     except Exception as e:
-        LogMessage(level=LOG_ERROR, module=MODULE_NAME,
-                   msg=f"Wait time out ,element {target_name} not find! error -> {e}")
+        LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Send text {text_} fail! -> {e}")
         return False
 
 
-def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring_name: str, wait_time=0.1) -> bool:
+def poco_try_find_offspring(poco, target_name: str, module_type: str, offspring_name: str, num_=None) -> bool:
     """
-    尝试寻找和点击 后面要加个功能 => 尝试等待返回结果
+    后代关联查找
+    :param poco: poco对象
+    :param target_name: 控件的name属性
+    :param module_type: 控件的type属性
+    :param offspring_name: 后代控件的关联字段
+    :param num_: 拥有多个同级的元素 得拿下标取值的
+    :return:
+    """
+    try:
+        if not num_:
+            poco(target_name=target_name, type=module_type).offspring(offspring_name).exists()
+            return True
+        elif num_:
+            poco(target_name=target_name, type=module_type).offspring(offspring_name)[num_].exists()
+            return True
+    except Exception as e:
+        LogMessage(level=LOG_ERROR, module=MODULE_NAME,
+                   msg=f"Wait time out ,element {target_name} {module_type} {offspring_name} Number:{num_} "
+                       f"not find! error -> {e}")
+        return False
+
+
+def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring_name: str, num_=None) -> bool:
+    """
+    尝试寻找后代节点和点击 后面要加个功能 => 尝试等待返回结果
     :param poco: poco对象
     :param target_name:控件的name属性
     :param module_type:控件的type属性
-    :param offspring_name: 父级控件的关联字段
-    :param wait_time:
+    :param offspring_name: 后代控件的关联字段
+    :param num_: 父级控件的关联字段
     :return:
     """
-    if poco_try_find_offspring(poco=poco, target_name=target_name, module_type=module_type,
-                               offspring_name=offspring_name):
+    try:
+        if not num_:
+            if poco(target_name=target_name, type=module_type).offspring(offspring_name).exists():
+                poco(target_name, type=module_type).offspring(offspring_name).click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Click {target_name} {module_type} {offspring_name} success!")
+                return True
+        elif num_:
+            if poco(target_name=target_name, type=module_type).offspring(offspring_name)[num_].exists():
+                poco(target_name, type=module_type).offspring(offspring_name)[num_].click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Click {target_name} {module_type} {offspring_name} {num_}success!")
+                return True
+    except Exception as e:
+        LogMessage(level=LOG_ERROR, module=MODULE_NAME,
+                   msg=f"Wait time out ,element {target_name} {module_type} {offspring_name} Number:{num_} "
+                       f"not find! error -> {e}")
+        return False
 
-        poco(target_name, type=module_type).offspring(offspring_name).wait(wait_time).click()
-        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} success!")
-        return True
-    else:
-        LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Click {target_name} fail!")
+
+def poco_child_find(poco, target_name: str, target_child: str, module_type: str, list_num=None) -> bool:
+    """
+    尝试寻找子对象 且点击
+    :param poco: poco对象
+    :param target_name:控件的name属性
+    :param module_type:控件的type属性
+    :param list_num:拥有多个同级的元素 得拿下标取值的
+    :param target_child:子级别元素
+    :return:
+    """
+    try:
+        if not list_num:
+            if poco(target_name, type=module_type).child(target_child).exists():
+                poco(target_name, type=module_type).child(target_child).click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Click {target_name} {module_type} {target_child} Success!")
+                return True
+        elif list_num:
+            if poco(target_name, type=module_type).child(target_child)[list_num].exists():
+                poco(target_name, type=module_type).child(target_child)[list_num].click()
+                LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                           msg=f"Click {target_name} {module_type} {target_child} Number:{list_num} Success!")
+                return True
+    except Exception as e:
+        LogMessage(level=LOG_ERROR, module=MODULE_NAME,
+                   msg=f"Wait time out ,element {target_name} {module_type} {target_child} Number:{list_num} "
+                       f"not find! error -> {e}")
         return False
 
 
@@ -281,37 +320,6 @@ def poco_lens_move_voiceover(poco, wait_time=0.5) -> bool:
     """
     sleep(wait_time)
     return True
-
-
-def poco_child_find(poco, target_name: str, target_child: str, module_type: str, wait_time=0.1, list_num=None) -> bool:
-    """
-    :param poco: poco对象
-    :param target_name:控件的name属性
-    :param wait_time:等待时间
-    :param module_type:控件的type属性
-    :param list_num:拥有多个同级的元素 得拿下标取值的
-    :param target_child:子级别元素
-    :return:
-    """
-    try:
-        if list_num:
-            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}[{list_num}]....")
-            if poco(target_name, type=module_type).child(target_child)[list_num].wait(wait_time).exists():
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} !")
-                poco(target_name, type=module_type).child(target_child)[list_num].click()
-                return True
-        else:
-            LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Try find {target_name}....")
-            if poco(target_name, type=module_type).child(target_child).wait(wait_time).exists():
-                LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} !")
-                poco(target_name, type=module_type).child(target_child).click()
-                return True
-
-        LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"Click {target_name} Success!")
-    except Exception as e:
-        LogMessage(level=LOG_ERROR, module=MODULE_NAME,
-                   msg=f"Wait time out ,element {target_name} not find! error -> {e}")
-        return False
 
 #
 #

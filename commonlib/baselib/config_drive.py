@@ -30,7 +30,7 @@ from commonlib.baselib.PocoDrivers import poco_try_find_click, poco_try_offsprin
     poco_play_dialog_rename, \
     poco_play_dialog, poco_select_skin, poco_cosplay_cossuit, poco_play_dialog_monologue, poco_play_dialog_voiceover, \
     poco_play_dialog_dialog_noshow, \
-    poco_play_dialog, poco_play_dialog_think, poco_play_dialog_dialog, poco_option_list, poco_lens_move, \
+    poco_play_dialog_think, poco_play_dialog_dialog, poco_option_list, poco_lens_move, \
     poco_lens_move_voiceover
 
 from commonlib.baselib.ConnectAdb import AdbConnect
@@ -282,6 +282,7 @@ class DeviceRun:
         """
         上层可以控制这里的输入 ['lens_move', 'play_dialog'] 不能等待两次
         这里是执行字符串转方法实例化的地方 会返回布尔值 来确定条目过不过
+        # 这里要实现先等待 再冻结 再点击的功能 没有则直接返回False 报没这个元素
         :param action_name: 行动名
         :param action_type: 行动详细
         :param branch_index: 分枝树
