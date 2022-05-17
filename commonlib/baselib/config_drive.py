@@ -122,8 +122,11 @@ class DeviceRun:
             # LogMessage(level=LOG_INFO, module=MODULE_NAME,
             #            msg=f"init the game has Diamond:{diamond_num} Power:{power_num}")
             poco_try_find_click(self.poco.freeze(), target_name="Search", module_type="Node")
-            poco_try_offspring_click(self.poco.freeze(), target_name="ViewCanvasUpper", module_type="Node",
+            poco_try_offspring_click(self.poco.freeze(), target_name="ViewCanvasUpper", module_type="Image",
                                      offspring_name="InputField")
+            poco_try_offspring_click(self.poco, target_name="ViewCanvasUpper", module_type="Node",
+                                     offspring_name="InputField")
+
             text(book_name, enter=False)
             if poco_find(self.poco.freeze(), target_name="SearchBook(Clone)", module_type="Node"):
                 # 这里需要空点一下 以退出输入框
@@ -133,11 +136,11 @@ class DeviceRun:
                 poco_try_find_click(self.poco.freeze(), target_name="Reset", module_type="Node")
                 poco_try_find_click(self.poco.freeze(), target_name="ComfirmBtn", module_type="Button")
                 return True
-            else:
-                # 如果没有搜索到书本则直接关掉游戏 或者等其他处理
-                stop_game(G.DEVICE, self.app_name)
-                g = DeviceRun()
-                g.search_book(book_name)
+            # else:
+            #     # 如果没有搜索到书本则直接关掉游戏 或者等其他处理
+            #     stop_game(G.DEVICE, self.app_name)
+            #     g = DeviceRun()
+            #     g.search_book(book_name)
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Init book error -> {e}")
             return False
@@ -325,7 +328,7 @@ if __name__ == '__main__':
         res = test.initial_data()
         res_dict, book_name_ = test.wash_the_books_action(res)
         test.search_book(book_name=book_name_)
-        test.select_chapters_first_entry(res_dict)
+        # test.select_chapters_first_entry(res_dict)
     else:
         test = DeviceRun(test_mode=True, excel_path=ConfigView.EXCEL_FILES_PATH, log_fp=ConfigView.LOG_FILES_PATH)
         res = test.initial_data()
