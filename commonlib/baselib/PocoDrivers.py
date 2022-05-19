@@ -230,7 +230,7 @@ def poco_get_element_attr(poco, name=None, child_=None, offspring_=None, type_=N
     :param name: 元素名称 主字段
     :param child_: 元素子级名称
     :param offspring_: 元素后代名称
-    :param type_: 元素类型 主字段
+    :param type_: 元素类型 主字段  # 好像没啥用....
     :param num_: 列表型元素取值字段
     :param wait_time:
     :param ele_name:元素属性名称 主字段
@@ -243,17 +243,18 @@ def poco_get_element_attr(poco, name=None, child_=None, offspring_=None, type_=N
     poco = poco.freeze()
     try:
         if all([name, child_, offspring_, type_, ele_name, num_]):
-            return poco(name, type_).offspring(offspring_).child(child_)[num_].attr(ele_name)
+            return poco(name).offspring(offspring_).child(child_)[num_].attr(ele_name)
         if all([name, child_, offspring_, type_, ele_name]):
-            return poco(name, type_).offspring(offspring_).child(child_).attr(ele_name)
+            result = poco(name).offspring(offspring_).child(child_).attr(ele_name)
+            return result
         if all([name, offspring_, type_, ele_name]):
-            return poco(name, type_).offspring(offspring_).attr(ele_name)
+            return poco(name).offspring(offspring_).attr(ele_name)
         if all([name, type_, ele_name]):
-            return poco(name, type_).attr(ele_name)
+            return poco(name).attr(ele_name)
+        sleep(SLEEP_TIME)
     except Exception as e:
         LogMessage(level=LOG_ERROR, module=MODULE_NAME,
-                   msg=f"Wait time out not find! error -> {e}")
-
+                   msg=f"Wait time out not find attr! error -> {e}")
     return False
 
 
