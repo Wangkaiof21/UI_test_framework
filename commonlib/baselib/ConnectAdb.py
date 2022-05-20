@@ -52,3 +52,9 @@ class AdbConnect:
                 get_name = line.split("\t")
                 devices_list.append(get_name[0])
         return devices_list
+
+    def install_game(self, dev, package, mypath):  # 安装应用
+        pass
+
+    def uninstall_game(self, dev, package, mypath):  # 卸载应用
+        pass

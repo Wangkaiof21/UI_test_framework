@@ -37,9 +37,12 @@ from commonlib.baselib.ConnectAdb import AdbConnect
 from poco.drivers.unity3d import UnityPoco
 from airtest.core.api import G, sleep, text, touch
 import os
-import numpy as np
+
+# import sys
+# import numpy as np
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
+# MODULE_NAME = sys.path.append((os.path.dirname((os.path.abspath('__file__')))).split("Lib")[0])
 TEST_OR_NOT = 'test_or_not'
 TYPE = "type"
 DIALOG_TYPE = "dialog_type"
@@ -197,7 +200,7 @@ class DeviceRun:
             if not values:
                 continue
             # 章节名的最后一个数字 做选章节的操作 这个其实不够保险
-            self.click_chapter(ch_index=key)
+            # self.click_chapter(ch_index=key)
             # 章节的条目数据 就是每一步的行动数据 对这个精细操作
             try:
                 for entry in values:
@@ -228,12 +231,6 @@ class DeviceRun:
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Chapter.{ch_index} Not find Play button -> {e}")
 
-    def gen_str(self, d_type_str):
-        if not d_type_str:
-            return ""
-        else:
-            return d_type_str.split(",")[0]
-
     def confirm_executable_method(self, type_str: str, dialog_type_str: str, branch_tree: str, wait_time_: str,
                                   dia_log_id: str):
         """
@@ -250,7 +247,8 @@ class DeviceRun:
         :return:
         """
         try:
-            dialog_type_str = self.gen_str(dialog_type_str)
+            # dialog_type_str = self.gen_str(dialog_type_str)
+            dialog_type_str = "" if not dialog_type_str else dialog_type_str.split(",")[0]
             # 可执行动作的list 多个行动对多个行动不好处理
             func_names = type_str.split(",")[:-1]
             result_index = self.union_data(func_names, ConfigView.EXECUTABLE_LIST)
@@ -259,14 +257,22 @@ class DeviceRun:
             LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"{result_index, dialog_type_str}")
             if len(result_index) > 1 and result_index.count('lens_move'):
                 for action in result_index:
-                    if action == 'lens_move':
-                        self.execute_read_action(action_name=action, action_type=dialog_type_str,
-                                                 branch_index=branch_tree, wait_time=0,
-                                                 action_id=dia_log_id)
-                    else:
-                        self.execute_read_action(action_name=action, action_type=dialog_type_str,
-                                                 branch_index=branch_tree, wait_time=wait_time_,
-                                                 action_id=dia_log_id)
+                    # if action == 'lens_move':
+                    #     self.execute_read_action(action_name=action, action_type=dialog_type_str,
+                    #                              branch_index=branch_tree, wait_time=0,
+                    #                              action_id=dia_log_id)
+                    # else:
+                    #     self.execute_read_action(action_name=action, action_type=dialog_type_str,
+                    #                              branch_index=branch_tree, wait_time=wait_time_,
+                    #                              action_id=dia_log_id)
+                    self.execute_read_action(action_name=action, action_type=dialog_type_str,
+                                             branch_index=branch_tree, wait_time=0,
+                                             action_id=dia_log_id) \
+                        if action == 'lens_move' else \
+                        self.execute_read_action(
+                            action_name=action, action_type=dialog_type_str,
+                            branch_index=branch_tree, wait_time=wait_time_,
+                            action_id=dia_log_id)
             else:
                 for action in result_index:
                     self.execute_read_action(action_name=action, action_type=dialog_type_str, branch_index=branch_tree,
@@ -274,7 +280,13 @@ class DeviceRun:
                                              action_id=dia_log_id)
         except Exception as e:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Func error -> {e}")
-        print("\n")
+        # print("\n")
+
+    # def gen_str(self, d_type_str):
+    #     if not d_type_str:
+    #         return ""
+    #     else:
+    #         return d_type_str.split(",")[0]
 
     def union_data(self, array_1, array_2):
         """
@@ -300,40 +312,42 @@ class DeviceRun:
         :param action_id: 条目id 用来展示用
         :return:
         """
-        index = poco_get_element_attr(self.poco, wait_time=0.2, name="top", type_="Node",
-                                      offspring_="index", child_="index_", ele_name="TMP_Text")
+        # page_id = poco_get_element_attr(self.poco, wait_time=0.2, name="top", type_="Node",
+        #                                 offspring_="index", child_="index_", ele_name="TMP_Text")
+        # index = poco_get_element_attr(self.poco, wait_time=0.2, name="top", type_="Node",
+        #                               offspring_="index", child_="index_", ele_name="TMP_Text")
         run_time = 0
         while run_time < 2:
             if action_name and action_type:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Func start ID: {action_id} poco_{action_name}_{action_type}"
                                f" wait_time -> {wait_time} second")
-                if globals()[f"poco_{action_name}_{action_type}"](self.poco, wait_time) and index == "start":
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                               msg=f"poco_{action_name}_{action_type} run success")
-                    # 确认多一次index是否为结束
-                    break
+                # if globals()[f"poco_{action_name}_{action_type}"](self.poco, wait_time):
+                #     LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                #                msg=f"poco_{action_name}_{action_type} run success")
+                #     # 确认多一次index是否为结束
+                #     break
 
             elif action_name and not action_type and not branch_index:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Func start ID: {action_id} poco_{action_name} wait_time -> {wait_time} second")
-                if globals()[f"poco_{action_name}"](self.poco, wait_time) and index:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{action_name} run success")
-                    break
+                # if globals()[f"poco_{action_name}"](self.poco, wait_time):
+                #     LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{action_name} run success")
+                #     break
 
             elif action_name and not action_type and branch_index:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Func start ID: {action_id} poco_{action_name} -> branch {int(branch_index)} "
                                f"wait_time -> {wait_time} second")
-                if globals()[f"poco_{action_name}"](self.poco, int(branch_index), wait_time) and index:
-                    LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{action_name} run success")
-                    break
-            # break
-            run_time += 1
+                # if globals()[f"poco_{action_name}"](self.poco, int(branch_index), wait_time):
+                #     LogMessage(level=LOG_INFO, module=MODULE_NAME, msg=f"poco_{action_name} run success")
+                #     break
+            break
+            # run_time += 1
 
 
 if __name__ == '__main__':
-    TEST_RANK = True
+    TEST_RANK = False
     if TEST_RANK:
         test = DeviceRun(excel_path=ConfigView.EXCEL_FILES_PATH, log_fp=ConfigView.LOG_FILES_PATH)
         res = test.initial_data()
