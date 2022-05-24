@@ -151,7 +151,7 @@ def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring
                 return True
             else:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Can't not find 1 {target_name} {module_type} {offspring_name}!")
+                           msg=f"Can't not find {target_name} {module_type} {offspring_name}!")
                 return False
         elif num_:
             if poco(target_name, type=module_type).offspring(offspring_name)[num_].exists():
@@ -161,7 +161,7 @@ def poco_try_offspring_click(poco, target_name: str, module_type: str, offspring
                 return True
             else:
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Can't not find 2 {target_name} {module_type} {offspring_name} {num_}!")
+                           msg=f"Can't not find {target_name} {module_type} {offspring_name} {num_}!")
                 return False
         # sleep(SLEEP_TIME)
     except Exception as e:
@@ -191,20 +191,18 @@ def poco_child_find(poco, target_name: str, target_child: str, module_type: str,
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Click {target_name} {module_type} {target_child} Success!")
                 return True
-            else:
-                LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Can't not find {target_name} {module_type} {target_child}!")
-                return False
+            LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                       msg=f"Can't not find {target_name} {module_type} {target_child}!")
+            return False
         elif list_num:
             if poco(target_name, type=module_type).child(target_child)[list_num].exists():
                 poco(target_name, type=module_type).child(target_child)[list_num].click()
                 LogMessage(level=LOG_INFO, module=MODULE_NAME,
                            msg=f"Click {target_name} {module_type} {target_child} Number:{list_num} Success!")
                 return True
-            else:
-                LogMessage(level=LOG_INFO, module=MODULE_NAME,
-                           msg=f"Can't not find {target_name} {module_type} {target_child} Number:{list_num}!")
-                return False
+            LogMessage(level=LOG_INFO, module=MODULE_NAME,
+                       msg=f"Can't not find {target_name} {module_type} {target_child} Number:{list_num}!")
+            return False
         sleep(SLEEP_TIME)
     except Exception as e:
         LogMessage(level=LOG_ERROR, module=MODULE_NAME,

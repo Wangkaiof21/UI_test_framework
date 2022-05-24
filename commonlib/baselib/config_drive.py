@@ -155,7 +155,9 @@ class DeviceRun:
             LogMessage(level=LOG_ERROR, module=MODULE_NAME, msg=f"Init book error -> {e}")
             return False
 
-    def wash_the_books_action(self, records: dict):
+    @staticmethod
+    def wash_the_books_action(records: dict):
+        # def wash_the_books_action(self, records: dict):
         """
         清洗excel读出来的数据
         使用初始化方法 进入游戏
@@ -287,8 +289,9 @@ class DeviceRun:
     #         return ""
     #     else:
     #         return d_type_str.split(",")[0]
-
-    def union_data(self, array_1, array_2):
+    @staticmethod
+    def union_data(array_1, array_2):
+        # def union_data(self, array_1, array_2):
         """
 
         :param array_1:
